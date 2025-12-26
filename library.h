@@ -1,0 +1,6 @@
+#ifndef JVM_CLASS_BUILDER__LIBRARY_H
+#define JVM_CLASS_BUILDER__LIBRARY_H
+
+void hello();
+
+#endif // JVM_CLASS_BUILDER__LIBRARY_H
