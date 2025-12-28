@@ -51,7 +51,7 @@ namespace Jvm
     class Class
     {
         static uint16_t minorVersion;
-        static uint16_t majorVersion;
+        static MajorVersion majorVersion;
 
     public:
         Class(std::string name);
