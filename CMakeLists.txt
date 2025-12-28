@@ -3,4 +3,15 @@ project(jvm_class_builder_)
 
 set(CMAKE_CXX_STANDARD 20)
 
-add_library(jvm_class_builder_ STATIC library.cpp)
+set(HEADERS
+        src/class.h
+)
+
+set(SOURCE
+        src/class.cpp
+)
+
+add_library(jvm_c STATIC
+        ${HEADERS}
+        ${SOURCE}
+)
