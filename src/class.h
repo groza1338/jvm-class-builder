@@ -14,6 +14,27 @@ namespace Jvm
     class Method;
     class Attribute;
 
+    enum MajorVersion:uint16_t
+    {
+        MAJOR_VERSION_1_0_2 = 45,
+        MAJOR_VERSION_1_1 = 45,
+        MAJOR_VERSION_1_2 = 46,
+        MAJOR_VERSION_1_3 = 47,
+        MAJOR_VERSION_1_4 = 48,
+        MAJOR_VERSION_5 = 49,
+        MAJOR_VERSION_6 = 50,
+        MAJOR_VERSION_7 = 51,
+        MAJOR_VERSION_8 = 52,
+        MAJOR_VERSION_9 = 53,
+        MAJOR_VERSION_10 = 54,
+        MAJOR_VERSION_11 = 55,
+        MAJOR_VERSION_12 = 56,
+        MAJOR_VERSION_13 = 57,
+        MAJOR_VERSION_14 = 58,
+        MAJOR_VERSION_15 = 59,
+        MAJOR_VERSION_16 = 60,
+    };
+
     enum AccessFlags
     {
         ACC_PUBLIC = 0x0001, // Declared public; may be accessed from outside its package.
