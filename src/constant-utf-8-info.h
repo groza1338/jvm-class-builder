@@ -1,0 +1,53 @@
+#ifndef JVM__CONSTANT_UTF_8_INFO_H
+#define JVM__CONSTANT_UTF_8_INFO_H
+
+
+#include <string>
+
+#include "constant.h"
+
+namespace Jvm
+{
+    /**
+     * Constant of utf8 string.
+     */
+    class ConstantUtf8Info : public Constant
+    {
+    public:
+        /**
+         * Looks up and returns an existing constant from the constant pool of classOwner or creates a new one.
+         * @param string Utf8 string constant.
+         * @param classOwner Pointer to class owner object.
+         */
+        static ConstantUtf8Info* getOrCreate(std::string string, Class* classOwner);
+
+        /**
+         * String getter.
+         * @return Utf8 string constant.
+         */
+        std::string getString() const;
+
+    private:
+        /**
+         * Create Utf8 constant object.
+         * @param string Utf8 string constant.
+         * @param classOwner Pointer to class owner object.
+         */
+        ConstantUtf8Info(std::string string, Class* classOwner);
+
+    protected:
+        /**
+         * Write object to output stream.
+         * @param os Output stream.
+         */
+        void toBinary(std::ostream& os) const override;
+
+    private:
+        /**
+         * Utf8 string content.
+         */
+        std::string string_;
+    };
+}
+
+#endif //JVM__CONSTANT_UTF_8_INFO_H
