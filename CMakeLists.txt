@@ -9,6 +9,7 @@ set(HEADERS
         src/constant-utf-8-info.h
         src/constant-class.h
         src/constant-name-and-type.h
+        src/constant-fieldref.h
         src/field.h
         src/method.h
         src/attribute.h
@@ -20,6 +21,7 @@ set(SOURCE
         src/constant-utf-8-info.cpp
         src/constant-class.cpp
         src/constant-name-and-type.cpp
+        src/constant-fieldref.cpp
         src/field.cpp
         src/method.cpp
         src/attribute.cpp
