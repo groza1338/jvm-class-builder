@@ -32,12 +32,12 @@ namespace Jvm
         /**
          * @return Class constant.
          */
-        ConstantClass* getClass() const;
+        [[nodiscard]] ConstantClass* getClass() const;
 
         /**
          * @return Field name and type constant.
          */
-        ConstantNameAndType* getNameAndType() const;
+        [[nodiscard]] ConstantNameAndType* getNameAndType() const;
 
     protected:
         void toBinary(std::ostream& os) const override;
