@@ -52,12 +52,12 @@ namespace Jvm
         /**
          * @return UTF-8 constant with name.
          */
-        ConstantUtf8Info* getName() const;
+        [[nodiscard]] ConstantUtf8Info* getName() const;
 
         /**
          * @return UTF-8 constant with descriptor.
          */
-        ConstantUtf8Info* getDescriptor() const;
+        [[nodiscard]] ConstantUtf8Info* getDescriptor() const;
 
     protected:
         void toBinary(std::ostream& os) const override;
