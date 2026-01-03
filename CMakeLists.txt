@@ -14,6 +14,7 @@ set(HEADERS
         src/constant-interface-methodref.h
         src/constant-string.h
         src/constant-integer.h
+        src/constant-float.h
         src/field.h
         src/method.h
         src/attribute.h
@@ -30,6 +31,7 @@ set(SOURCE
         src/constant-interface-methodref.cpp
         src/constant-string.cpp
         src/constant-integer.cpp
+        src/constant-float.cpp
         src/field.cpp
         src/method.cpp
         src/attribute.cpp
