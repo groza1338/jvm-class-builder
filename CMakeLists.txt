@@ -15,6 +15,7 @@ set(HEADERS
         src/constant-string.h
         src/constant-integer.h
         src/constant-float.h
+        src/constant-double.h
         src/field.h
         src/method.h
         src/attribute.h
@@ -32,6 +33,7 @@ set(SOURCE
         src/constant-string.cpp
         src/constant-integer.cpp
         src/constant-float.cpp
+        src/constant-double.cpp
         src/field.cpp
         src/method.cpp
         src/attribute.cpp
