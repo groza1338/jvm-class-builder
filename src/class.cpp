@@ -12,7 +12,9 @@ uint16_t Class::minorVersion = 0x0000;
 void Class::addNewConstant(Constant* constant)
 {
     constants_.push_back(constant);
-    constant->setIndex(constants_.size());
+    constant->setIndex(nextCpIndex);
+
+    nextCpIndex += constant->getOccupiedSlots();
 }
 
 std::span<Constant*> Class::constants()

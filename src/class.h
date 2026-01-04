@@ -64,6 +64,7 @@ namespace Jvm
         void toBinary(std::ostream& os) const;
 
         std::vector<Constant*> constants_{};
+        uint16_t nextCpIndex = 1; // 0 index is not available for writing
         std::set<AccessFlags> accessFlags_{};
         Constant* thisClassConstant_ = nullptr;
         Constant* superClassConstant_ = nullptr;
