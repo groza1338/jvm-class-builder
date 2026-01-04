@@ -51,6 +51,11 @@ namespace Jvm
         Tag getTag() const;
 
         /**
+         * @return the number of slots by the constant
+         */
+        [[nodiscard]] virtual uint16_t getOccupiedSlots() const;
+
+        /**
          * @return Index in the table of constants.
          */
         uint16_t getIndex() const;

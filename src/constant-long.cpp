@@ -30,6 +30,11 @@ int64_t ConstantLong::getValue() const
     return value_;
 }
 
+uint16_t ConstantLong::getOccupiedSlots() const
+{
+    return 2;
+}
+
 void ConstantLong::toBinary(std::ostream& os) const
 {
     Constant::toBinary(os);

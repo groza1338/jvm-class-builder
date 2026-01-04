@@ -30,6 +30,11 @@ double ConstantDouble::getValue() const
     return value_;
 }
 
+uint16_t ConstantDouble::getOccupiedSlots() const
+{
+    return 2;
+}
+
 void ConstantDouble::toBinary(std::ostream& os) const
 {
     Constant::toBinary(os);

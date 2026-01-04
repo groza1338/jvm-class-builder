@@ -10,6 +10,11 @@ Constant::Tag Constant::getTag() const
     return tag_;
 }
 
+uint16_t Constant::getOccupiedSlots() const
+{
+    return 1;
+}
+
 uint16_t Constant::getIndex() const
 {
     return index_;

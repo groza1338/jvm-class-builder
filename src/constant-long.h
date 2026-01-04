@@ -21,6 +21,11 @@ namespace Jvm
          */
         [[nodiscard]] int64_t getValue() const;
 
+        /**
+        * @return the number of slots by the constant
+        */
+        [[nodiscard]] uint16_t getOccupiedSlots() const override;
+
     protected:
         void toBinary(std::ostream& os) const override;
 
