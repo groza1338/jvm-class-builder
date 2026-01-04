@@ -1,7 +1,6 @@
 #ifndef JVM__CONSTANT_UTF_8_INFO_H
 #define JVM__CONSTANT_UTF_8_INFO_H
 
-
 #include <string>
 
 #include "constant.h"
@@ -13,14 +12,9 @@ namespace Jvm
      */
     class ConstantUtf8Info : public Constant
     {
-    public:
-        /**
-         * Looks up and returns an existing constant from the constant pool of classOwner or creates a new one.
-         * @param string Utf8 string constant.
-         * @param classOwner Pointer to class owner object.
-         */
-        static ConstantUtf8Info* getOrCreate(std::string string, Class* classOwner);
+        friend class Class;
 
+    public:
         /**
          * String getter.
          * @return Utf8 string constant.

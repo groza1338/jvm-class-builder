@@ -17,8 +17,8 @@ Field::Field(ConstantUtf8Info* name, ConstantUtf8Info* descriptor) : name_(name)
 
 Field::Field(std::string name, std::string descriptor, Class* classOwner) : classOwner_(classOwner)
 {
-    name_ = ConstantUtf8Info::getOrCreate(std::move(name), classOwner);
-    descriptor_ = ConstantUtf8Info::getOrCreate(std::move(descriptor), classOwner);
+    name_ = classOwner_->getOrCreateUtf8Constant(name);
+    descriptor_ = classOwner_->getOrCreateUtf8Constant(descriptor);
 }
 
 void Field::addFlag(AccessFlag flag)

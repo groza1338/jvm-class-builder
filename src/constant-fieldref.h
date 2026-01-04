@@ -7,28 +7,11 @@
 
 namespace Jvm
 {
-    class ConstantFieldref : public Constant
+    class ConstantFieldref final : public Constant
     {
-    public:
-        /**
-         * Looks up and returns an existing constant from constant pool of classOwner or create a new one.
-         * @note Can create class constant or name and type constant.
-         * @param className Class name string.
-         * @param fieldName Field name string.
-         * @param fieldDescriptor Filed descriptor.
-         * @param classOwner Class owner.
-         * @return Fieldref constant.
-         */
-        static ConstantFieldref* getOrCreate(std::string className, std::string fieldName, std::string fieldDescriptor,
-                                             Class* classOwner);
-        /**
-         * Looks up and returns an existing constant from constant pool of classOwner or create a new one.
-         * @param classConstant Class constant.
-         * @param nameAndTypeConstant Field name and type constant.
-         * @return Fieldref constant.
-         */
-        static ConstantFieldref* getOrCreate(ConstantClass* classConstant, ConstantNameAndType* nameAndTypeConstant);
+        friend class Class;
 
+    public:
         /**
          * @return Class constant.
          */

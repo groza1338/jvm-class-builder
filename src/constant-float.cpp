@@ -6,25 +6,6 @@
 
 using namespace Jvm;
 
-ConstantFloat* ConstantFloat::getOrCreate(float value, Class* classOwner)
-{
-    // search constant
-    for (auto* constant : classOwner->constants())
-    {
-        if (constant->getTag() == CONSTANT_Float)
-        {
-            // Use static method because only one tag can be associated with only one class type.
-            auto* constantFloat = static_cast<ConstantFloat*>(constant);
-            if (std::memcmp(&constantFloat->value_, &value, sizeof(float)) == 0)
-            {
-                return constantFloat;
-            }
-        }
-    }
-    // create new
-    return new ConstantFloat(value, classOwner);
-}
-
 float ConstantFloat::getValue() const
 {
     return value_;

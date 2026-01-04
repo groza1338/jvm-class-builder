@@ -7,15 +7,9 @@ namespace Jvm
 {
     class ConstantFloat : public Constant
     {
-    public:
-        /**
-         * Looks up and returns an existing constant from constant pool of classOwner or create a new one.
-         * @param value Float value.
-         * @param classOwner Class owner.
-         * @return Float constant.
-         */
-        static ConstantFloat* getOrCreate(float value, Class* classOwner);
+        friend class Class;
 
+    public:
         /**
          * @return Float value.
          */

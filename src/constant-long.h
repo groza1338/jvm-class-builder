@@ -7,15 +7,9 @@ namespace Jvm
 {
     class ConstantLong : public Constant
     {
-    public:
-        /**
-         * Looks up and returns an existing constant from constant pool of classOwner or create a new one.
-         * @param value long value.
-         * @param classOwner Class owner.
-         * @return Long constant.
-         */
-        static ConstantLong* getOrCreate(long value, Class* classOwner);
+        friend class Class;
 
+    public:
         /**
          * @return Long value.
          */

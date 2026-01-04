@@ -6,39 +6,6 @@
 
 using namespace Jvm;
 
-ConstantFieldref* ConstantFieldref::getOrCreate(std::string className, std::string fieldName,
-                                                std::string fieldDescriptor, Class* classOwner)
-{
-    ConstantClass* classConstant = ConstantClass::getOrCreate(std::move(className), classOwner);
-    ConstantNameAndType* nameAndTypeConstant = ConstantNameAndType::getOrCreate(
-        std::move(fieldName), std::move(fieldDescriptor), classOwner);
-    return getOrCreate(classConstant, nameAndTypeConstant);
-}
-
-ConstantFieldref* ConstantFieldref::getOrCreate(ConstantClass* classConstant, ConstantNameAndType* nameAndTypeConstant)
-{
-    bool equalClassOwner = classConstant->getClassOwner() == nameAndTypeConstant->getClassOwner();
-    assert(equalClassOwner);
-
-    // search constant
-    Class* classOwner = classConstant->getClassOwner();
-    for (auto constant : classOwner->constants())
-    {
-        if (constant->getTag() == CONSTANT_Fieldref)
-        {
-            // Use static method because only one tag can be associated with only one class type.
-            ConstantFieldref* constantFieldref = static_cast<ConstantFieldref*>(constant);
-            if (constantFieldref->getClass() == classConstant && constantFieldref->getNameAndType() ==
-                nameAndTypeConstant)
-            {
-                return constantFieldref;
-            }
-        }
-    }
-    // create new
-    return new ConstantFieldref(classConstant, nameAndTypeConstant);
-}
-
 ConstantClass* ConstantFieldref::getClass() const
 {
     return class_;

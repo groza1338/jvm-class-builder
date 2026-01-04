@@ -3,26 +3,6 @@
 #include <ostream>
 using namespace Jvm;
 
-ConstantUtf8Info* ConstantUtf8Info::getOrCreate(std::string string, Class* classOwner)
-{
-    // search constant
-    auto constants = classOwner->constants();
-    for(auto constant : constants)
-    {
-        if (constant->getTag() == CONSTANT_Utf8)
-        {
-            // Use static method because only one tag can be associated with only one class type.
-            ConstantUtf8Info* constantUtf8 = static_cast<ConstantUtf8Info*>(constant);
-            if(constantUtf8->getString() == string)
-            {
-                return constantUtf8;
-            }
-        }
-    }
-    // create new
-    return new ConstantUtf8Info(string, classOwner);
-}
-
 std::string ConstantUtf8Info::getString() const
 {
     return string_;

@@ -5,40 +5,6 @@
 
 using namespace Jvm;
 
-ConstantInterfaceMethodref* ConstantInterfaceMethodref::getOrCreate(std::string className, std::string methodName,
-                                                                    std::string methodDescriptor, Class* classOwner)
-{
-    ConstantClass* classConstant = ConstantClass::getOrCreate(std::move(className), classOwner);
-    ConstantNameAndType* nameAndTypeConstant = ConstantNameAndType::getOrCreate(
-        std::move(methodName), std::move(methodDescriptor), classOwner);
-    return getOrCreate(classConstant, nameAndTypeConstant);
-}
-
-ConstantInterfaceMethodref* ConstantInterfaceMethodref::getOrCreate(ConstantClass* classConstant,
-                                                                    ConstantNameAndType* nameAndTypeConstant)
-{
-    bool equalClassOwner = classConstant->getClassOwner() == nameAndTypeConstant->getClassOwner();
-    assert(equalClassOwner);
-
-    // search constant
-    Class* classOwner = classConstant->getClassOwner();
-    for (auto constant : classOwner->constants())
-    {
-        if (constant->getTag() == CONSTANT_InterfaceMethodref)
-        {
-            // Use static method because only one tag can be associated with only one class type.
-            ConstantInterfaceMethodref* constantMethodref = static_cast<ConstantInterfaceMethodref*>(constant);
-            if (constantMethodref->getClass() == classConstant && constantMethodref->getNameAndType() ==
-                nameAndTypeConstant)
-            {
-                return constantMethodref;
-            }
-        }
-    }
-    // create new
-    return new ConstantInterfaceMethodref(classConstant, nameAndTypeConstant);
-}
-
 ConstantClass* ConstantInterfaceMethodref::getClass() const
 {
     return class_;

@@ -27,7 +27,6 @@ Class* Constant::getClassOwner() const
 
 Constant::Constant(Tag tag, Class* classOwner) : tag_(tag), classOwner_(classOwner)
 {
-    classOwner_->addNewConstant(this);
 }
 
 void Constant::toBinary(std::ostream& os) const

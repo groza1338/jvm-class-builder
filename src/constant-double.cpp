@@ -6,25 +6,6 @@
 
 using namespace Jvm;
 
-ConstantDouble* ConstantDouble::getOrCreate(double value, Class* classOwner)
-{
-    // search constant
-    for (auto* constant : classOwner->constants())
-    {
-        if (constant->getTag() == CONSTANT_Double)
-        {
-            // Use static method because only one tag can be associated with only one class type.
-            auto* constantDouble = static_cast<ConstantDouble*>(constant);
-            if (std::memcmp(&constantDouble->value_, &value, sizeof(double)) == 0)
-            {
-                return constantDouble;
-            }
-        }
-    }
-    // create new
-    return new ConstantDouble(value, classOwner);
-}
-
 double ConstantDouble::getValue() const
 {
     return value_;

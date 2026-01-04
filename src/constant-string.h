@@ -11,23 +11,9 @@ namespace Jvm
      */
     class ConstantString : public Constant
     {
+        friend class Class;
+
     public:
-        /**
-         * Looks up and returns an existing constant from constant pool of classOwner or create a new one.
-         * @note Cant create UTF-8 string constant.
-         * @param string String value.
-         * @param classOwner Class owner.
-         * @return String constant.
-         */
-        ConstantString* getOrCreate(std::string string, Class* classOwner);
-
-        /**
-         * Looks up and returns an existing constant from constant pool of classOwner or create a new one.
-         * @param utf8StringConstant UTF-8 string constant.
-         * @return String constant.
-         */
-        ConstantString* getOrCreate(ConstantUtf8Info* utf8StringConstant);
-
         /**
          * @return UTF-8 string constant.
          */

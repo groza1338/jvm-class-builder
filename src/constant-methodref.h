@@ -7,28 +7,11 @@
 
 namespace Jvm
 {
-    class ConstantMethodref : public Constant
+    class ConstantMethodref final : public Constant
     {
-    public:
-        /**
-         * Looks up and returns an existing constant from constant pool of classOwner or create a new one.
-         * @note Can create class constant or name and type constant.
-         * @param className Class name string.
-         * @param methodName Method name string.
-         * @param methodDescriptor Method descriptor.
-         * @param classOwner Class owner.
-         * @return Methodref constant.
-         */
-        static ConstantMethodref* getOrCreate(std::string className, std::string methodName,
-                                              std::string methodDescriptor, Class* classOwner);
-        /**
-         * Looks up and returns an existing constant from constant pool of classOwner or create a new one.
-         * @param classConstant Class constant.
-         * @param nameAndTypeConstant Method name and type constant.
-         * @return Methodref constant.
-         */
-        static ConstantMethodref* getOrCreate(ConstantClass* classConstant, ConstantNameAndType* nameAndTypeConstant);
+        friend class Class;
 
+    public:
         /**
          * @return Class constant.
          */

@@ -7,15 +7,9 @@ namespace Jvm
 {
     class ConstantDouble : public Constant
     {
-    public:
-        /**
-         * Looks up and returns an existing constant from constant pool of classOwner or create a new one.
-         * @param value double value.
-         * @param classOwner Class owner.
-         * @return Double constant.
-         */
-        static ConstantDouble* getOrCreate(double value, Class* classOwner);
+        friend class Class;
 
+    public:
         /**
          * @return Double value.
          */

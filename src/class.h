@@ -9,6 +9,17 @@
 
 namespace Jvm
 {
+    class ConstantDouble;
+    class ConstantLong;
+    class ConstantFloat;
+    class ConstantInteger;
+    class ConstantString;
+    class ConstantInterfaceMethodref;
+    class ConstantMethodref;
+    class ConstantNameAndType;
+    class ConstantFieldref;
+    class ConstantUtf8Info;
+    class ConstantClass;
     class Constant;
     class Field;
     class Method;
@@ -56,11 +67,242 @@ namespace Jvm
 
         Class(std::string name);
 
-        void addNewConstant(Constant* constant);
+        /* GET OR CREATE CLASS CONSTANT */
+
+        /**
+         * @brief Returns an existing @ref ConstantClass "Class constant" from this class's constant pool,
+         *        or creates and returns a new one.
+         * @note May create a new @ref ConstantUtf8Info entry for the class name.
+         * @param name Class internal name (e.g. "java/lang/String").
+         * @return Class constant.
+         */
+        ConstantClass* getOrCreateClassConstant(const std::string& name);
+
+        /**
+         * @brief Returns an existing @ref ConstantClass "Class constant" from this class's constant pool,
+         *        or creates and returns a new one.
+         * @note The provided constant must have this @c Class instance as its owner.
+         * @param name UTF-8 constant containing the class internal name.
+         * @return Class constant.
+         */
+        ConstantClass* getOrCreateClassConstant(ConstantUtf8Info* name);
+
+
+        /* GET OR CREATE FIELDREF CONSTANT */
+
+        /**
+         * @brief Returns an existing @ref ConstantFieldref "Fieldref constant" from this class's constant pool,
+         *        or creates and returns a new one.
+         * @note May create @ref ConstantClass and @ref ConstantNameAndType entries as needed.
+         * @param className Class internal name (e.g. "java/lang/System").
+         * @param fieldName Field name.
+         * @param fieldDescriptor Field descriptor (e.g. "I", "Ljava/lang/String;", "[I").
+         * @return Fieldref constant.
+         */
+        ConstantFieldref* getOrCreateFieldrefConstant(const std::string& className,
+                                                      const std::string& fieldName,
+                                                      const std::string& fieldDescriptor);
+
+        /**
+         * @brief Returns an existing @ref ConstantFieldref "Fieldref constant" from this class's constant pool,
+         *        or creates and returns a new one.
+         * @note The provided constants must have this @c Class instance as their owner.
+         * @param classConstant Class constant.
+         * @param nameAndTypeConstant Name-and-type constant for the field.
+         * @return Fieldref constant.
+         */
+        ConstantFieldref* getOrCreateFieldrefConstant(ConstantClass* classConstant,
+                                                      ConstantNameAndType* nameAndTypeConstant);
+
+
+        /* GET OR CREATE METHODREF CONSTANT */
+
+        /**
+         * @brief Returns an existing @ref ConstantMethodref "Methodref constant" from this class's constant pool,
+         *        or creates and returns a new one.
+         * @note May create @ref ConstantClass and @ref ConstantNameAndType entries as needed.
+         * @param className Class internal name (e.g. "java/lang/String").
+         * @param methodName Method name (e.g. "hashCode", "&lt;init&gt;", "&lt;clinit&gt;").
+         * @param methodDescriptor Method descriptor (e.g. "()I", "(I)Ljava/lang/String;").
+         * @return Methodref constant.
+         */
+        ConstantMethodref* getOrCreateMethodrefConstant(const std::string& className,
+                                                        const std::string& methodName,
+                                                        const std::string& methodDescriptor);
+
+        /**
+         * @brief Returns an existing @ref ConstantMethodref "Methodref constant" from this class's constant pool,
+         *        or creates and returns a new one.
+         * @note The provided constants must have this @c Class instance as their owner.
+         * @param classConstant Class constant.
+         * @param nameAndTypeConstant Name-and-type constant for the method.
+         * @return Methodref constant.
+         */
+        ConstantMethodref* getOrCreateMethodrefConstant(ConstantClass* classConstant,
+                                                        ConstantNameAndType* nameAndTypeConstant);
+
+
+        /* GET OR CREATE INTERFACE METHODREF CONSTANT */
+
+        /**
+         * @brief Returns an existing @ref ConstantInterfaceMethodref "InterfaceMethodref constant" from this class's constant pool,
+         *        or creates and returns a new one.
+         * @note May create @ref ConstantClass and @ref ConstantNameAndType entries as needed.
+         * @param className Interface internal name (e.g. "java/lang/Runnable").
+         * @param methodName Interface method name.
+         * @param methodDescriptor Method descriptor (e.g. "()V").
+         * @return Interface methodref constant.
+         */
+        ConstantInterfaceMethodref* getOrCreateInterfaceMethodrefConstant(const std::string& className,
+                                                                          const std::string& methodName,
+                                                                          const std::string& methodDescriptor);
+
+        /**
+         * @brief Returns an existing @ref ConstantInterfaceMethodref "InterfaceMethodref constant" from this class's constant pool,
+         *        or creates and returns a new one.
+         * @note The provided constants must have this @c Class instance as their owner.
+         * @param classConstant Class constant.
+         * @param nameAndTypeConstant Name-and-type constant for the interface method.
+         * @return Interface methodref constant.
+         */
+        ConstantInterfaceMethodref* getOrCreateInterfaceMethodrefConstant(ConstantClass* classConstant,
+                                                                          ConstantNameAndType* nameAndTypeConstant);
+
+
+        /* GET OR CREATE STRING CONSTANT */
+
+        /**
+         * @brief Returns an existing @ref ConstantString "String constant" from this class's constant pool,
+         *        or creates and returns a new one.
+         * @note May create a new @ref ConstantUtf8Info entry for the string contents.
+         * @param value String contents.
+         * @return String constant.
+         */
+        ConstantString* getOrCreateStringConstant(const std::string& value);
+
+        /**
+         * @brief Returns an existing @ref ConstantString "String constant" from this class's constant pool,
+         *        or creates and returns a new one.
+         * @note The provided constant must have this @c Class instance as its owner.
+         * @param utf8Constant UTF-8 constant containing the string contents.
+         * @return String constant.
+         */
+        ConstantString* getOrCreateStringConstant(ConstantUtf8Info* utf8Constant);
+
+
+        /* GET OR CREATE INTEGER CONSTANT */
+
+        /**
+         * @brief Returns an existing @ref ConstantInteger "Integer constant" from this class's constant pool,
+         *        or creates and returns a new one.
+         * @param value Integer value.
+         * @return Integer constant.
+         */
+        ConstantInteger* getOrCreateIntegerConstant(int32_t value);
+
+
+        /* GET OR CREATE FLOAT CONSTANT */
+
+        /**
+         * @brief Returns an existing @ref ConstantFloat "Float constant" from this class's constant pool,
+         *        or creates and returns a new one.
+         * @param value Float value.
+         * @return Float constant.
+         */
+        ConstantFloat* getOrCreateFloatConstant(float value);
+
+
+        /* GET OR CREATE LONG CONSTANT */
+
+        /**
+         * @brief Returns an existing @ref ConstantLong "Long constant" from this class's constant pool,
+         *        or creates and returns a new one.
+         *
+         * @param value Long value.
+         * @return Long constant.
+         */
+        ConstantLong* getOrCreateLongConstant(int64_t value);
+
+
+        /* GET OR CREATE DOUBLE CONSTANT */
+
+        /**
+         * @brief Returns an existing @ref ConstantDouble "Double constant" from this class's constant pool,
+         *        or creates and returns a new one.
+         * @param value Double value.
+         * @return Double constant.
+         */
+        ConstantDouble* getOrCreateDoubleConstant(double value);
+
+
+        /* GET OR CREATE NAME AND TYPE CONSTANT */
+
+        /**
+         * @brief Returns an existing @ref ConstantNameAndType "Name-and-type constant" from this class's constant pool,
+         *        or creates and returns a new one.
+         * @note May create new @ref ConstantUtf8Info entries for the name and descriptor.
+         * @param name Name.
+         * @param descriptor Descriptor (field descriptor like "I", or method descriptor like "(I)V").
+         * @return Name-and-type constant.
+         */
+        ConstantNameAndType* getOrCreateNameAndTypeConstant(const std::string& name, const std::string& descriptor);
+
+        /**
+         * @brief Returns an existing @ref ConstantNameAndType "Name-and-type constant" from this class's constant pool,
+         *        or creates and returns a new one.
+         * @note May create a new @ref ConstantUtf8Info entry for the name.
+         * @note The provided constant must have this @c Class instance as its owner.
+         * @param name Name.
+         * @param descriptorConstant UTF-8 constant containing the descriptor.
+         * @return Name-and-type constant.
+         */
+        ConstantNameAndType* getOrCreateNameAndTypeConstant(const std::string& name,
+                                                            ConstantUtf8Info* descriptorConstant);
+
+        /**
+         * @brief Returns an existing @ref ConstantNameAndType "Name-and-type constant" from this class's constant pool,
+         *        or creates and returns a new one.
+         * @note May create a new @ref ConstantUtf8Info entry for the descriptor.
+         * @note The provided constant must have this @c Class instance as its owner.
+         * @param nameConstant UTF-8 constant containing the name.
+         * @param descriptor Descriptor (field descriptor like "I", or method descriptor like "(I)V").
+         * @return Name-and-type constant.
+         */
+        ConstantNameAndType* getOrCreateNameAndTypeConstant(ConstantUtf8Info* nameConstant,
+                                                            const std::string& descriptor);
+
+        /**
+         * @brief Returns an existing @ref ConstantNameAndType "Name-and-type constant" from this class's constant pool,
+         *        or creates and returns a new one.
+         * @note The provided constants must have this @c Class instance as their owner.
+         * @param nameConstant UTF-8 constant containing the name.
+         * @param descriptorConstant UTF-8 constant containing the descriptor.
+         * @return Name-and-type constant.
+         */
+        ConstantNameAndType* getOrCreateNameAndTypeConstant(ConstantUtf8Info* nameConstant,
+                                                            ConstantUtf8Info* descriptorConstant);
+
+
+        /* GET OR CREATE UTF-8 CONSTANT */
+
+        /**
+         * @brief Returns an existing @ref ConstantUtf8Info "UTF-8 constant" from this class's constant pool,
+         *        or creates and returns a new one.
+         * @param value UTF-8 string value (stored using the class-file UTF-8 format).
+         * @return UTF-8 constant.
+         */
+        ConstantUtf8Info* getOrCreateUtf8Constant(const std::string& value);
 
         std::span<Constant*> constants();
 
     private:
+        /**
+         * @brief Add a constant to the constant pool.
+         * Add a constant to constant pool and set index to the constant.
+         * @param constant New constant.
+         */
+        void addNewConstant(Constant* constant);
+
         void toBinary(std::ostream& os) const;
 
         std::vector<Constant*> constants_{};
