@@ -5,7 +5,7 @@
 
 #include "jvm/internal/utils.h"
 
-using namespace Jvm;
+using namespace jvm;
 
 double ConstantDouble::getValue() const
 {
@@ -20,7 +20,7 @@ uint16_t ConstantDouble::getOccupiedSlots() const
 void ConstantDouble::toBinary(std::ostream& os) const
 {
     Constant::toBinary(os);
-    Internal::Utils::writeBigEndian(os, value_);
+    internal::Utils::writeBigEndian(os, value_);
 }
 
 ConstantDouble::ConstantDouble(double value, Class* classOwner)

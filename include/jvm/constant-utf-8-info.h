@@ -5,7 +5,7 @@
 
 #include "constant.h"
 
-namespace Jvm
+namespace jvm
 {
     /**
      * Constant of utf8 string.

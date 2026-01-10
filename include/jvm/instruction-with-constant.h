@@ -4,7 +4,7 @@
 #include "constant.h"
 #include "instruction.h"
 
-namespace Jvm
+namespace jvm
 {
     /**
      * @brief Bytecode instruction that references an entry in the constant pool.
@@ -70,6 +70,6 @@ namespace Jvm
         Constant* constant_; ///< Referenced constant pool entry.
         AvailableReferenceSize size_; ///< Operand size used to encode the constant pool index.
     };
-} // Jvm
+} // jvm
 
 #endif //JVM__INSTRUCTION_WITH_CONSTANT_H

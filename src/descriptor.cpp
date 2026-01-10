@@ -2,7 +2,7 @@
 
 #include <stdexcept>
 
-using namespace Jvm;
+using namespace jvm;
 
 void Descriptor::isValidPrimitiveFieldType(PrimitiveFieldType primitiveFieldType)
 {

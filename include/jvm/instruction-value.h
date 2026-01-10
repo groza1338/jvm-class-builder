@@ -7,7 +7,7 @@
 #include "jvm/instruction.h"
 #include "jvm/internal/utils.h"
 
-namespace Jvm
+namespace jvm
 {
     /**
      * @brief Operand type constraint for bytecode instruction parameters.
@@ -47,7 +47,7 @@ namespace Jvm
 
             std::apply([&os](auto&&... xs)
             {
-                (Internal::Utils::writeBigEndian(os, xs), ...);
+                (internal::Utils::writeBigEndian(os, xs), ...);
             }, values_);
         }
 
@@ -112,6 +112,6 @@ namespace Jvm
 
         std::tuple<Args...> values_; ///< Stored operand values.
     };
-} //Jvm
+} //jvm
 
 #endif //JVM__INSTRUCTION_VALUE_H

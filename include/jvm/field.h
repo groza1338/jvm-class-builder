@@ -4,7 +4,7 @@
 
 #include "constant-utf-8-info.h"
 
-namespace Jvm
+namespace jvm
 {
     class Attribute;
 
@@ -107,6 +107,6 @@ namespace Jvm
     };
 
     std::ostream& operator<<(std::ostream& os, const Field& field);
-} // Jvm
+} // jvm
 
 #endif //JVM__FIELD_H

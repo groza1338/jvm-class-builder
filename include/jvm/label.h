@@ -3,7 +3,7 @@
 
 #include "instruction.h"
 
-namespace Jvm
+namespace jvm
 {
     class AttributeCode;
 
@@ -67,6 +67,6 @@ namespace Jvm
         Instruction* instruction_ = nullptr; ///< Instruction indicated by the label, or @c nullptr if unbound.
         AttributeCode* attributeCodeOwner_; ///< Owning code attribute.
     };
-} // Jvm
+} // jvm
 
 #endif //JVM__LABEL_H

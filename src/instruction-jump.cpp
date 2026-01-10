@@ -6,7 +6,7 @@
 #include "jvm/attribute-code.h"
 #include "jvm/internal/utils.h"
 
-using namespace Jvm;
+using namespace jvm;
     Label* InstructionJump::getJumpLabel() const
     {
         return label_;
@@ -34,5 +34,5 @@ using namespace Jvm;
             throw std::logic_error("Jump label is not bound to any instruction.");
         }
 
-        Internal::Utils::writeBigEndian(os, static_cast<uint16_t>(calculateShift(toTarget)));
+        internal::Utils::writeBigEndian(os, static_cast<uint16_t>(calculateShift(toTarget)));
     }

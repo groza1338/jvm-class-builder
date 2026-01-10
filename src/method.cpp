@@ -4,7 +4,7 @@
 #include <ostream>
 #include <utility>
 
-using namespace Jvm;
+using namespace jvm;
 
 void Method::addFlag(AccessFlag flag)
 {
@@ -99,7 +99,7 @@ void Method::toBinary(std::ostream& os) const
     }
 }
 
-std::ostream& Jvm::operator<<(std::ostream& os, const Method& method)
+std::ostream& jvm::operator<<(std::ostream& os, const Method& method)
 {
     method.toBinary(os);
     return os;

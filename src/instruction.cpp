@@ -2,7 +2,7 @@
 
 #include <ostream>
 
-using namespace Jvm;
+using namespace jvm;
 
 Instruction::Command Instruction::getCommandCode() const
 {

@@ -4,7 +4,7 @@
 #include "attribute-code.h"
 #include "constant-utf-8-info.h"
 
-namespace Jvm
+namespace jvm
 {
     class Attribute;
 
@@ -121,6 +121,6 @@ namespace Jvm
     };
 
     std::ostream& operator<<(std::ostream& os, const Method& method);
-} // Jvm
+} // jvm
 
 #endif //JVM__METHOD_H

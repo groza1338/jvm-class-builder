@@ -2,7 +2,7 @@
 
 #include "jvm/internal/utils.h"
 
-using namespace Jvm;
+using namespace jvm;
 
 int64_t ConstantLong::getValue() const
 {
@@ -17,7 +17,7 @@ uint16_t ConstantLong::getOccupiedSlots() const
 void ConstantLong::toBinary(std::ostream& os) const
 {
     Constant::toBinary(os);
-    Internal::Utils::writeBigEndian(os, value_);
+    internal::Utils::writeBigEndian(os, value_);
 }
 
 ConstantLong::ConstantLong(int64_t value, Class* classOwner)

@@ -2,7 +2,7 @@
 
 #include <ostream>
 
-using namespace Jvm;
+using namespace jvm;
 
 
 Constant::Tag Constant::getTag() const
@@ -39,7 +39,7 @@ void Constant::setIndex(uint32_t index)
     index_ = index;
 }
 
-std::ostream& Jvm::operator<<(std::ostream& os, const Constant& constant)
+std::ostream& jvm::operator<<(std::ostream& os, const Constant& constant)
 {
     constant.toBinary(os);
     return os;

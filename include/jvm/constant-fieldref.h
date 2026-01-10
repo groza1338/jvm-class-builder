@@ -5,7 +5,7 @@
 #include "constant-name-and-type.h"
 #include "constant.h"
 
-namespace Jvm
+namespace jvm
 {
     class ConstantFieldref final : public Constant
     {
@@ -36,7 +36,7 @@ namespace Jvm
         ConstantClass* class_; ///< Class constant.
         ConstantNameAndType* nameAndType_; ///< Field name and type constant.
     };
-} //Jvm
+} //jvm
 
 
 #endif //JVM__CONSTANT_FIELDREF_H

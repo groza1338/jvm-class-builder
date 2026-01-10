@@ -4,7 +4,7 @@
 #include "constant-utf-8-info.h"
 #include "constant.h"
 
-namespace Jvm
+namespace jvm
 {
     /**
      * Name and type constant.
@@ -39,6 +39,6 @@ namespace Jvm
         ConstantUtf8Info* name_; ///< UTF-8 constant with name.
         ConstantUtf8Info* descriptor_; ///< UTF-8 constant with descriptor.
     };
-} // Jvm
+} // jvm
 
 #endif //JVM__CONSTANT_NAME_AND_TYPE_H

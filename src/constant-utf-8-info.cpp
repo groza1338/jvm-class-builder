@@ -4,7 +4,7 @@
 
 #include "jvm/internal/utils.h"
 
-using namespace Jvm;
+using namespace jvm;
 
 std::string ConstantUtf8Info::getString() const
 {
@@ -20,6 +20,6 @@ void ConstantUtf8Info::toBinary(std::ostream& os) const
 {
     Constant::toBinary(os);
     uint16_t size = string_.size();
-    Internal::Utils::writeBigEndian(os, size);
+    internal::Utils::writeBigEndian(os, size);
     os.write(string_.c_str(), size);
 }

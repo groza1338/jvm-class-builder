@@ -4,7 +4,7 @@
 #include <ostream>
 #include <utility>
 
-using namespace Jvm;
+using namespace jvm;
 
 
 Field::Field(ConstantUtf8Info* name, ConstantUtf8Info* descriptor) : name_(name), descriptor_(descriptor)
@@ -96,7 +96,7 @@ void Field::toBinary(std::ostream& os) const
     }
 }
 
-std::ostream& Jvm::operator<<(std::ostream& os, const Field& field)
+std::ostream& jvm::operator<<(std::ostream& os, const Field& field)
 {
     field.toBinary(os);
     return os;

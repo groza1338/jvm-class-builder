@@ -16,7 +16,7 @@
 #include "jvm/method.h"
 
 
-using namespace Jvm;
+using namespace jvm;
 
 #define REQUIRE_FINALIZED() \
 if (!isFinalized()) { \
@@ -1275,13 +1275,13 @@ void AttributeCode::toBinary(std::ostream& os) const
     Attribute::toBinary(os);
 
     // u2 max_stack;
-    Internal::Utils::writeBigEndian(os, static_cast<uint16_t>(maxStack_));
+    internal::Utils::writeBigEndian(os, static_cast<uint16_t>(maxStack_));
 
     // u2 max_locals;
-    Internal::Utils::writeBigEndian(os, static_cast<uint16_t>(maxLocals_));
+    internal::Utils::writeBigEndian(os, static_cast<uint16_t>(maxLocals_));
 
     // u4 code_length;
-    Internal::Utils::writeBigEndian(os, static_cast<uint32_t>(instructionsByteSize_));
+    internal::Utils::writeBigEndian(os, static_cast<uint32_t>(instructionsByteSize_));
 
     // u1 code[code_length];
     for (auto* instruction : code_)
@@ -1290,7 +1290,7 @@ void AttributeCode::toBinary(std::ostream& os) const
     }
 
     // u2 exception_table_length;
-    Internal::Utils::writeBigEndian(os, static_cast<uint16_t>(exceptionsHandlersByteSize_));
+    internal::Utils::writeBigEndian(os, static_cast<uint16_t>(exceptionsHandlersByteSize_));
 
     // exception_table[exception_table_length];
     for (auto* handler : exceptionHandlers_)
@@ -1299,7 +1299,7 @@ void AttributeCode::toBinary(std::ostream& os) const
     }
 
     // u2 attributes_count;
-    Internal::Utils::writeBigEndian(os, static_cast<uint16_t>(attributes_.size()));
+    internal::Utils::writeBigEndian(os, static_cast<uint16_t>(attributes_.size()));
 
     // attribute_info attributes[attributes_count];
     for (auto* attribute : attributes_)

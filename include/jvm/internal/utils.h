@@ -5,7 +5,7 @@
 #include <iosfwd>
 #include <ostream>
 
-namespace Jvm::Internal
+namespace jvm::internal
 {
     class Utils
     {
@@ -21,7 +21,7 @@ namespace Jvm::Internal
         static void writeBigEndian(std::ostream& os, float val);
         static void writeBigEndian(std::ostream& os, double val);
     };
-} // Jvm
+} // jvm
 
 
 #endif //JVM__UTILS_H

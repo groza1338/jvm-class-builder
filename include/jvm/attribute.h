@@ -4,7 +4,7 @@
 
 #include "constant-utf-8-info.h"
 
-namespace Jvm
+namespace jvm
 {
     class Attribute
     {
@@ -19,19 +19,19 @@ namespace Jvm
         [[nodiscard]] ConstantUtf8Info* getName() const;
 
         /**
-         * Is it class @{Jvm::Class} attribute.
+         * Is it class @{jvm::Class} attribute.
          * @return Is class attribute.
          */
         [[nodiscard]] virtual bool isClassAttribute() const;
 
         /**
-         * Is it field @{Jvm::Field} attribute.
+         * Is it field @{jvm::Field} attribute.
          * @return Is field attribute.
          */
         [[nodiscard]] virtual bool isFieldAttribute() const;
 
         /**
-         * Is it method @{Jvm::Method} attribute.
+         * Is it method @{jvm::Method} attribute.
          * @return Is method attribute.
          */
         [[nodiscard]] virtual bool isMethodAttribute() const;
@@ -66,6 +66,6 @@ namespace Jvm
     };
 
     std::ostream& operator<<(std::ostream& os, const Attribute& attribute);
-} // Jvm
+} // jvm
 
 #endif //JVM__ATTRIBUTE_H

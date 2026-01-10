@@ -3,7 +3,7 @@
 #include <arpa/inet.h>
 #include <cstring>
 
-namespace Jvm::Internal
+namespace jvm::internal
 {
     void Utils::writeBigEndian(std::ostream& os, uint8_t val)
     {
@@ -69,4 +69,4 @@ namespace Jvm::Internal
         std::memcpy(&bits, &val, sizeof(bits));
         writeBigEndian(os, bits);
     }
-} // Jvm
+} // jvm

@@ -52,7 +52,7 @@ target_include_directories(jvm-class-builder
         ${CMAKE_CURRENT_SOURCE_DIR}/src/internal
 )
 
-add_library(Jvm::ClassBuilder ALIAS jvm-class-builder)
+add_library(jvm::ClassBuilder ALIAS jvm-class-builder)
 
 include(GNUInstallDirs)
 include(CMakePackageConfigHelpers)
@@ -71,7 +71,7 @@ install(DIRECTORY include/
 
 install(EXPORT jvm-class-builderTargets
         FILE jvm-class-builderTargets.cmake
-        NAMESPACE Jvm::
+        NAMESPACE jvm::
         DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/jvm-class-builder
 )
 

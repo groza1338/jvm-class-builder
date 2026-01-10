@@ -3,7 +3,7 @@
 
 #include "instruction-with-constant.h"
 
-namespace Jvm
+namespace jvm
 {
     /**
      * @brief Instruction "ldc*". Load a constant from the constant pool onto the operand stack.
@@ -75,6 +75,6 @@ namespace Jvm
          */
         void update() override;
     };
-} // Jvm
+} // jvm
 
 #endif //JVM__INSTRUCTION_LDC_H

@@ -4,7 +4,7 @@
 #include "instruction.h"
 #include "label.h"
 
-namespace Jvm
+namespace jvm
 {
     /**
      * @brief Branch instruction that transfers control to a target @ref Label.
@@ -47,6 +47,6 @@ namespace Jvm
 
         Label* label_; ///< Target label (non-owning).
     };
-} // Jvm
+} // jvm
 
 #endif //JVM__INSTRUCTION_JUMP_H

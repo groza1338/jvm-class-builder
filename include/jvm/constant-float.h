@@ -3,7 +3,7 @@
 
 #include "constant.h"
 
-namespace Jvm
+namespace jvm
 {
     class ConstantFloat : public Constant
     {
@@ -28,6 +28,6 @@ namespace Jvm
 
         float value_; ///< Float value.
     };
-} // namespace Jvm
+} // namespace jvm
 
 #endif // JVM__CONSTANT_FLOAT_H

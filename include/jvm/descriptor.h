@@ -4,7 +4,7 @@
 #include <cstdint>
 #include <string>
 
-namespace Jvm
+namespace jvm
 {
     class Descriptor
     {

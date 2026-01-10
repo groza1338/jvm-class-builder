@@ -3,7 +3,7 @@
 #include <stdexcept>
 #include <strings.h>
 
-using namespace Jvm;
+using namespace jvm;
 
 void InstructionLdc::update()
 {

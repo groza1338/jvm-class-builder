@@ -6,7 +6,7 @@
 #include "constant-name-and-type.h"
 #include "constant.h"
 
-namespace Jvm
+namespace jvm
 {
     class ConstantInterfaceMethodref : public Constant
     {
@@ -37,7 +37,7 @@ namespace Jvm
         ConstantClass* class_; ///< Class constant.
         ConstantNameAndType* nameAndType_; ///< Interface method name and type constant.
     };
-} //Jvm
+} //jvm
 
 
 #endif //JVM__CONSTANT_INTERFACE_METHODREF_H

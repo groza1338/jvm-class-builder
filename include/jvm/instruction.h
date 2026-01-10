@@ -4,7 +4,7 @@
 #include <cstdint>
 #include <iosfwd>
 
-namespace Jvm
+namespace jvm
 {
     class AttributeCode;
 
@@ -567,6 +567,6 @@ namespace Jvm
     };
 
     std::ostream& operator<<(std::ostream& os, const Instruction& instruction);
-} // Jvm
+} // jvm
 
 #endif //JVM__INSTRUCTION_H

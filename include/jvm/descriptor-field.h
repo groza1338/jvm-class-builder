@@ -5,7 +5,7 @@
 
 #include "descriptor.h"
 
-namespace Jvm
+namespace jvm
 {
     class DescriptorField: public Descriptor
     {

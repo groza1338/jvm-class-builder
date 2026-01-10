@@ -2,7 +2,7 @@
 
 #include <cassert>
 
-using namespace Jvm;
+using namespace jvm;
 
 Instruction* Label::getInstruction() const
 {

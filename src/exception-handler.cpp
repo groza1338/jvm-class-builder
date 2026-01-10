@@ -9,7 +9,7 @@
 #include "jvm/label.h"
 #include "jvm/internal/utils.h"
 
-using namespace Jvm;
+using namespace jvm;
 
 Label* ExceptionHandler::getTryStartLabel() const
 {
@@ -64,10 +64,10 @@ void ExceptionHandler::toBinary(std::ostream& os) const
         catch_type = catchClass_->getIndex();
     }
 
-    Internal::Utils::writeBigEndian(os, static_cast<uint16_t>(start_pc));
-    Internal::Utils::writeBigEndian(os, static_cast<uint16_t>(end_pc));
-    Internal::Utils::writeBigEndian(os, static_cast<uint16_t>(handler_pc));
-    Internal::Utils::writeBigEndian(os, static_cast<uint16_t>(catch_type));
+    internal::Utils::writeBigEndian(os, static_cast<uint16_t>(start_pc));
+    internal::Utils::writeBigEndian(os, static_cast<uint16_t>(end_pc));
+    internal::Utils::writeBigEndian(os, static_cast<uint16_t>(handler_pc));
+    internal::Utils::writeBigEndian(os, static_cast<uint16_t>(catch_type));
 }
 
 ExceptionHandler::ExceptionHandler(Label* tryStartLabel,

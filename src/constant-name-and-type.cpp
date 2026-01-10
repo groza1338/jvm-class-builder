@@ -4,7 +4,7 @@
 
 #include "jvm/internal/utils.h"
 
-namespace Jvm
+namespace jvm
 {
     ConstantUtf8Info* ConstantNameAndType::getName() const
     {
@@ -20,9 +20,9 @@ namespace Jvm
     {
         Constant::toBinary(os);
         uint16_t nameIndex = name_->getIndex();
-        Internal::Utils::writeBigEndian(os, nameIndex);
+        internal::Utils::writeBigEndian(os, nameIndex);
         uint16_t descriptorIndex = descriptor_->getIndex();
-        Internal::Utils::writeBigEndian(os, descriptorIndex);
+        internal::Utils::writeBigEndian(os, descriptorIndex);
     }
 
     ConstantNameAndType::ConstantNameAndType(ConstantUtf8Info* name, ConstantUtf8Info* descriptor) :
@@ -32,4 +32,4 @@ namespace Jvm
         Class* descriptorClassOwner = descriptor->getClassOwner();
         assert(nameClassOwner == descriptorClassOwner);
     }
-} // Jvm
+} // jvm

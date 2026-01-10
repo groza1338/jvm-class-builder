@@ -4,7 +4,7 @@
 #include <cstdint>
 #include "class.h"
 
-namespace Jvm
+namespace jvm
 {
     /**
      * Base class of constant.

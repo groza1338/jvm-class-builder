@@ -3,7 +3,7 @@
 
 #include "constant.h"
 
-namespace Jvm
+namespace jvm
 {
     class ConstantDouble : public Constant
     {
@@ -33,7 +33,7 @@ namespace Jvm
 
         double value_; ///< Double value.
     };
-} // namespace Jvm
+} // namespace jvm
 
 
 #endif // JVM__CONSTANT_DOUBLE_H

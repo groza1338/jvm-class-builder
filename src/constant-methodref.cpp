@@ -4,7 +4,7 @@
 
 #include "jvm/internal/utils.h"
 
-using namespace Jvm;
+using namespace jvm;
 
 ConstantClass* ConstantMethodref::getClass() const
 {
@@ -20,9 +20,9 @@ void ConstantMethodref::toBinary(std::ostream& os) const
 {
     Constant::toBinary(os);
     uint16_t classIndex = class_->getIndex();
-    Internal::Utils::writeBigEndian(os, classIndex);
+    internal::Utils::writeBigEndian(os, classIndex);
     uint16_t nameAndTypeIndex = nameAndType_->getIndex();
-    Internal::Utils::writeBigEndian(os, nameAndTypeIndex);
+    internal::Utils::writeBigEndian(os, nameAndTypeIndex);
 }
 
 ConstantMethodref::ConstantMethodref(ConstantClass* classConstant, ConstantNameAndType* nameAndTypeConstant) :

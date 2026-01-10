@@ -3,7 +3,7 @@
 
 #include "constant.h"
 
-namespace Jvm
+namespace jvm
 {
     class ConstantLong : public Constant
     {
@@ -33,7 +33,7 @@ namespace Jvm
 
         int64_t value_; ///< Long value.
     };
-} // namespace Jvm
+} // namespace jvm
 
 
 #endif // JVM__CONSTANT_LONG_H

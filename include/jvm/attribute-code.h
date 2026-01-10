@@ -10,7 +10,7 @@
 #include "instruction-jump.h"
 
 
-namespace Jvm
+namespace jvm
 {
     /**
      * @brief Code attribute.
@@ -3465,6 +3465,6 @@ namespace Jvm
 
         Method* methodOwner_; ///< Method owner.
     };
-} // Jvm
+} // jvm
 
 #endif //JVM__ATTRIBUTE_CODE_H

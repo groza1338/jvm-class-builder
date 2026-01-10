@@ -7,7 +7,7 @@
 #include <string>
 #include <vector>
 
-namespace Jvm
+namespace jvm
 {
     class ConstantDouble;
     class ConstantLong;

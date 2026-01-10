@@ -4,7 +4,7 @@
 
 #include "jvm/internal/utils.h"
 
-using namespace Jvm;
+using namespace jvm;
 
 Constant* InstructionWithConstant::getConstant() const
 {
@@ -26,7 +26,7 @@ void InstructionWithConstant::toBinary(std::ostream& os) const
     }
     else
     {
-        Internal::Utils::writeBigEndian(os, index);
+        internal::Utils::writeBigEndian(os, index);
     }
 }
 

@@ -3,7 +3,7 @@
 #include <stdexcept>
 #include <utility>
 
-using namespace Jvm;
+using namespace jvm;
 
 DescriptorField DescriptorField::primitive(PrimitiveFieldType primitiveFieldType)
 {

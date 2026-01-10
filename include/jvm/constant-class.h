@@ -4,7 +4,7 @@
 #include "constant-utf-8-info.h"
 #include "constant.h"
 
-namespace Jvm
+namespace jvm
 {
     /**
      * Class constant.
@@ -34,6 +34,6 @@ namespace Jvm
          */
         ConstantUtf8Info* name_ = nullptr;
     };
-} // Jvm
+} // jvm
 
 #endif //JVM__CONSTANT_CLASS_H

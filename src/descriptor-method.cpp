@@ -2,7 +2,7 @@
 
 #include <stdexcept>
 
-using namespace Jvm;
+using namespace jvm;
 
 DescriptorMethod DescriptorMethod::of(std::vector<DescriptorField> params, std::optional<DescriptorField> ret)
 {

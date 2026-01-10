@@ -3,7 +3,7 @@
 
 #include "constant.h"
 
-namespace Jvm
+namespace jvm
 {
     class ConstantInteger : public Constant
     {
@@ -28,6 +28,6 @@ namespace Jvm
 
         int32_t value_; ///< Integer value.
     };
-} // Jvm
+} // jvm
 
 #endif //JVM__CONSTANT_INTEGER_H

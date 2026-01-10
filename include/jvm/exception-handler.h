@@ -4,7 +4,7 @@
 #include <cstdint>
 #include <iosfwd>
 
-namespace Jvm
+namespace jvm
 {
     class AttributeCode;
     class ConstantClass;
@@ -97,6 +97,6 @@ namespace Jvm
      * @brief Stream helper for serializing exception handlers.
      */
     std::ostream& operator<<(std::ostream& os, const ExceptionHandler& handler);
-} // namespace Jvm
+} // namespace jvm
 
 #endif // JVM__EXCEPTION_HANDLER_H
