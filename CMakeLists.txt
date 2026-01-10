@@ -33,6 +33,7 @@ add_library(jvm-class-builder
         src/label.cpp
         src/exception-handler.cpp
         src/internal/utils.cpp
+        src/descriptor.cpp
 )
 
 target_compile_features(jvm-class-builder PUBLIC cxx_std_20)
