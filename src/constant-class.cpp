@@ -2,7 +2,7 @@
 
 #include <ostream>
 
-#include "internal/utils.h"
+#include "jvm/internal/utils.h"
 
 using namespace Jvm;
 
@@ -15,7 +15,7 @@ void ConstantClass::toBinary(std::ostream& os) const
 {
     Constant::toBinary(os);
     uint16_t nameIndex = name_->getIndex();
-    Utils::writeBigEndian(os, nameIndex);
+    Internal::Utils::writeBigEndian(os, nameIndex);
 }
 
 ConstantClass::ConstantClass(ConstantUtf8Info* name) : Constant(CONSTANT_Class, name->getClassOwner()), name_(name)

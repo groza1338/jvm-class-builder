@@ -2,7 +2,7 @@
 
 #include <cassert>
 
-#include "internal/utils.h"
+#include "jvm/internal/utils.h"
 
 namespace Jvm
 {
@@ -20,9 +20,9 @@ namespace Jvm
     {
         Constant::toBinary(os);
         uint16_t nameIndex = name_->getIndex();
-        Utils::writeBigEndian(os, nameIndex);
+        Internal::Utils::writeBigEndian(os, nameIndex);
         uint16_t descriptorIndex = descriptor_->getIndex();
-        Utils::writeBigEndian(os, descriptorIndex);
+        Internal::Utils::writeBigEndian(os, descriptorIndex);
     }
 
     ConstantNameAndType::ConstantNameAndType(ConstantUtf8Info* name, ConstantUtf8Info* descriptor) :

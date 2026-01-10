@@ -2,7 +2,7 @@
 
 #include <cstring>
 
-#include "internal/utils.h"
+#include "jvm/internal/utils.h"
 
 using namespace Jvm;
 
@@ -14,7 +14,7 @@ float ConstantFloat::getValue() const
 void ConstantFloat::toBinary(std::ostream& os) const
 {
     Constant::toBinary(os);
-    Utils::writeBigEndian(os, value_);
+    Internal::Utils::writeBigEndian(os, value_);
 }
 
 ConstantFloat::ConstantFloat(float value, Class* classOwner)

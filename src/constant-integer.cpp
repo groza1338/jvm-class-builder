@@ -2,7 +2,7 @@
 
 #include <ostream>
 
-#include "internal/utils.h"
+#include "jvm/internal/utils.h"
 
 using namespace Jvm;
 
@@ -14,7 +14,7 @@ int32_t ConstantInteger::getValue()
 void ConstantInteger::toBinary(std::ostream& os) const
 {
     Constant::toBinary(os);
-    Utils::writeBigEndian(os, value_);
+    Internal::Utils::writeBigEndian(os, value_);
 }
 
 ConstantInteger::ConstantInteger(int32_t value, Class* classOwner) : Constant(CONSTANT_Integer, classOwner),

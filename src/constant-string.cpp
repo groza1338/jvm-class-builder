@@ -2,7 +2,7 @@
 
 #include <ostream>
 
-#include "internal/utils.h"
+#include "jvm/internal/utils.h"
 
 using namespace Jvm;
 
@@ -15,7 +15,7 @@ void ConstantString::toBinary(std::ostream& os) const
 {
     Constant::toBinary(os);
     uint16_t stringIndex = string_->getIndex();
-    Utils::writeBigEndian(os, stringIndex);
+    Internal::Utils::writeBigEndian(os, stringIndex);
 }
 
 ConstantString::ConstantString(ConstantUtf8Info* utf8StringConstant) :

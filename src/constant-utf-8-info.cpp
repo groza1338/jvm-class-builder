@@ -2,7 +2,7 @@
 
 #include <ostream>
 
-#include "internal/utils.h"
+#include "jvm/internal/utils.h"
 
 using namespace Jvm;
 
@@ -20,6 +20,6 @@ void ConstantUtf8Info::toBinary(std::ostream& os) const
 {
     Constant::toBinary(os);
     uint16_t size = string_.size();
-    Utils::writeBigEndian(os, size);
+    Internal::Utils::writeBigEndian(os, size);
     os.write(string_.c_str(), size);
 }

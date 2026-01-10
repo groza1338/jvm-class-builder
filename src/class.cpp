@@ -18,7 +18,7 @@
 #include "jvm/constant-string.h"
 #include "jvm/constant-utf-8-info.h"
 #include "jvm/method.h"
-#include "internal/utils.h"
+#include "jvm/internal/utils.h"
 
 
 using namespace Jvm;
@@ -399,17 +399,17 @@ void Class::toBinary(std::ostream& os) const
 {
     // u4             magic;
     static uint32_t magicNumber = 0xCAFEBABE;
-    Utils::writeBigEndian(os, magicNumber);
+    Internal::Utils::writeBigEndian(os, magicNumber);
 
     // u2             minor_version;
-    Utils::writeBigEndian(os, minorVersion);
+    Internal::Utils::writeBigEndian(os, minorVersion);
 
     // u2             major_version;
-    Utils::writeBigEndian(os, static_cast<uint16_t>(majorVersion));
+    Internal::Utils::writeBigEndian(os, static_cast<uint16_t>(majorVersion));
 
     // u2             constant_pool_count;
     uint16_t constantCount = static_cast<uint16_t>(nextCpIndex);
-    Utils::writeBigEndian(os, constantCount);
+    Internal::Utils::writeBigEndian(os, constantCount);
 
     // cp_info        constant_pool[constant_pool_count-1];
     for (const auto& constant : constants_)
@@ -423,30 +423,30 @@ void Class::toBinary(std::ostream& os) const
     {
         accessFlags = accessFlags | flag;
     }
-    Utils::writeBigEndian(os, accessFlags);
+    Internal::Utils::writeBigEndian(os, accessFlags);
 
     // u2             this_class;
     uint16_t thisClass = thisClassConstant_->getIndex();
-    Utils::writeBigEndian(os, thisClass);
+    Internal::Utils::writeBigEndian(os, thisClass);
 
     // u2             super_class;
     uint16_t superClass = superClassConstant_->getIndex();
-    Utils::writeBigEndian(os, superClass);
+    Internal::Utils::writeBigEndian(os, superClass);
 
     // u2             interfaces_count;
     uint16_t interfacesCount = static_cast<uint16_t>(interfacesConstant_.size());
-    Utils::writeBigEndian(os, interfacesCount);
+    Internal::Utils::writeBigEndian(os, interfacesCount);
 
     // u2             interfaces[interfaces_count];
     for (const auto& interface : interfacesConstant_)
     {
         uint16_t interfaceIndex = interface->getIndex();
-        Utils::writeBigEndian(os, interfaceIndex);
+        Internal::Utils::writeBigEndian(os, interfaceIndex);
     }
 
     // u2             fields_count;
     uint16_t fieldsCount = static_cast<uint16_t>(fields_.size());
-    Utils::writeBigEndian(os, fieldsCount);
+    Internal::Utils::writeBigEndian(os, fieldsCount);
 
     // field_info     fields[fields_count];
     for (const auto& field : fields_)
@@ -456,7 +456,7 @@ void Class::toBinary(std::ostream& os) const
 
     // u2             methods_count;
     uint16_t methodsCount = static_cast<uint16_t>(fields_.size());
-    Utils::writeBigEndian(os, methodsCount);
+    Internal::Utils::writeBigEndian(os, methodsCount);
 
     // method_info    methods[methods_count];
     for (const auto& method : methods_)
@@ -466,7 +466,7 @@ void Class::toBinary(std::ostream& os) const
 
     // u2             attributes_count;
     uint16_t attributesCount = static_cast<uint16_t>(fields_.size());
-    Utils::writeBigEndian(os, attributesCount);
+    Internal::Utils::writeBigEndian(os, attributesCount);
 
     // attribute_info attributes[attributes_count];
     for (const auto& attribute : attributes_)

@@ -5,7 +5,7 @@
 #include <iosfwd>
 #include <ostream>
 
-namespace Jvm
+namespace Jvm::Internal
 {
     class Utils
     {

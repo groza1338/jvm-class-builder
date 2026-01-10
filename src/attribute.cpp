@@ -2,7 +2,7 @@
 
 #include <ostream>
 
-#include "internal/utils.h"
+#include "jvm/internal/utils.h"
 
 using namespace Jvm;
 
@@ -40,11 +40,11 @@ void Attribute::toBinary(std::ostream& os) const
 {
     // u2 attribute_name_index;
     uint16_t nameIndex = name_->getIndex();
-    Utils::writeBigEndian(os, static_cast<uint16_t>(nameIndex));
+    Internal::Utils::writeBigEndian(os, static_cast<uint16_t>(nameIndex));
 
     // u4 attribute_length;
     uint32_t length = getAttributeLength();
-    Utils::writeBigEndian(os, static_cast<uint32_t>(length));
+    Internal::Utils::writeBigEndian(os, static_cast<uint32_t>(length));
 }
 
 std::ostream& Jvm::operator<<(std::ostream& os, const Attribute& attribute)

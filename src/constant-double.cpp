@@ -3,7 +3,7 @@
 #include <cstring>
 #include <arpa/inet.h>
 
-#include "internal/utils.h"
+#include "jvm/internal/utils.h"
 
 using namespace Jvm;
 
@@ -20,7 +20,7 @@ uint16_t ConstantDouble::getOccupiedSlots() const
 void ConstantDouble::toBinary(std::ostream& os) const
 {
     Constant::toBinary(os);
-    Utils::writeBigEndian(os, value_);
+    Internal::Utils::writeBigEndian(os, value_);
 }
 
 ConstantDouble::ConstantDouble(double value, Class* classOwner)

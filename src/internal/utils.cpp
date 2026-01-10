@@ -1,9 +1,9 @@
-#include "../utils.h"
+#include "jvm/internal/utils.h"
 #include <ostream>
 #include <arpa/inet.h>
 #include <cstring>
 
-namespace Jvm
+namespace Jvm::Internal
 {
     void Utils::writeBigEndian(std::ostream& os, uint8_t val)
     {

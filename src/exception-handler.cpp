@@ -7,7 +7,7 @@
 #include "jvm/constant-class.h"
 #include "jvm/instruction.h"
 #include "jvm/label.h"
-#include "internal/utils.h"
+#include "jvm/internal/utils.h"
 
 using namespace Jvm;
 
@@ -64,10 +64,10 @@ void ExceptionHandler::toBinary(std::ostream& os) const
         catch_type = catchClass_->getIndex();
     }
 
-    Utils::writeBigEndian(os, static_cast<uint16_t>(start_pc));
-    Utils::writeBigEndian(os, static_cast<uint16_t>(end_pc));
-    Utils::writeBigEndian(os, static_cast<uint16_t>(handler_pc));
-    Utils::writeBigEndian(os, static_cast<uint16_t>(catch_type));
+    Internal::Utils::writeBigEndian(os, static_cast<uint16_t>(start_pc));
+    Internal::Utils::writeBigEndian(os, static_cast<uint16_t>(end_pc));
+    Internal::Utils::writeBigEndian(os, static_cast<uint16_t>(handler_pc));
+    Internal::Utils::writeBigEndian(os, static_cast<uint16_t>(catch_type));
 }
 
 ExceptionHandler::ExceptionHandler(Label* tryStartLabel,

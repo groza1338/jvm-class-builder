@@ -4,8 +4,8 @@
 #include <concepts>
 #include <tuple>
 
-#include "../../src/instruction.h"
-#include "../../src/internal/utils.h"
+#include "jvm/instruction.h"
+#include "jvm/internal/utils.h"
 
 namespace Jvm
 {
@@ -47,7 +47,7 @@ namespace Jvm
 
             std::apply([&os](auto&&... xs)
             {
-                (Utils::writeBigEndian(os, xs), ...);
+                (Internal::Utils::writeBigEndian(os, xs), ...);
             }, values_);
         }
 

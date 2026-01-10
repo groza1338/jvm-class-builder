@@ -2,7 +2,7 @@
 
 #include <ostream>
 
-#include "internal/utils.h"
+#include "jvm/internal/utils.h"
 
 using namespace Jvm;
 
@@ -26,7 +26,7 @@ void InstructionWithConstant::toBinary(std::ostream& os) const
     }
     else
     {
-        Utils::writeBigEndian(os, index);
+        Internal::Utils::writeBigEndian(os, index);
     }
 }
 

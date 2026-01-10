@@ -1275,13 +1275,13 @@ void AttributeCode::toBinary(std::ostream& os) const
     Attribute::toBinary(os);
 
     // u2 max_stack;
-    Utils::writeBigEndian(os, static_cast<uint16_t>(maxStack_));
+    Internal::Utils::writeBigEndian(os, static_cast<uint16_t>(maxStack_));
 
     // u2 max_locals;
-    Utils::writeBigEndian(os, static_cast<uint16_t>(maxLocals_));
+    Internal::Utils::writeBigEndian(os, static_cast<uint16_t>(maxLocals_));
 
     // u4 code_length;
-    Utils::writeBigEndian(os, static_cast<uint32_t>(instructionsByteSize_));
+    Internal::Utils::writeBigEndian(os, static_cast<uint32_t>(instructionsByteSize_));
 
     // u1 code[code_length];
     for (auto* instruction : code_)
@@ -1290,7 +1290,7 @@ void AttributeCode::toBinary(std::ostream& os) const
     }
 
     // u2 exception_table_length;
-    Utils::writeBigEndian(os, static_cast<uint16_t>(exceptionsHandlersByteSize_));
+    Internal::Utils::writeBigEndian(os, static_cast<uint16_t>(exceptionsHandlersByteSize_));
 
     // exception_table[exception_table_length];
     for (auto* handler : exceptionHandlers_)
@@ -1299,7 +1299,7 @@ void AttributeCode::toBinary(std::ostream& os) const
     }
 
     // u2 attributes_count;
-    Utils::writeBigEndian(os, static_cast<uint16_t>(attributes_.size()));
+    Internal::Utils::writeBigEndian(os, static_cast<uint16_t>(attributes_.size()));
 
     // attribute_info attributes[attributes_count];
     for (auto* attribute : attributes_)

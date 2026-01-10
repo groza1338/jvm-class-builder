@@ -2,7 +2,7 @@
 
 #include <cassert>
 
-#include "internal/utils.h"
+#include "jvm/internal/utils.h"
 
 using namespace Jvm;
 
@@ -20,9 +20,9 @@ void ConstantInterfaceMethodref::toBinary(std::ostream& os) const
 {
     Constant::toBinary(os);
     uint16_t classIndex = class_->getIndex();
-    Utils::writeBigEndian(os, classIndex);
+    Internal::Utils::writeBigEndian(os, classIndex);
     uint16_t nameAndTypeIndex = nameAndType_->getIndex();
-    Utils::writeBigEndian(os, nameAndTypeIndex);
+    Internal::Utils::writeBigEndian(os, nameAndTypeIndex);
 }
 
 ConstantInterfaceMethodref::ConstantInterfaceMethodref(ConstantClass* classConstant,
