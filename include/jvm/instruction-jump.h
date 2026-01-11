@@ -28,13 +28,6 @@ namespace jvm
          */
         [[nodiscard]] Label* getJumpLabel() const;
 
-        [[nodiscard]] uint8_t getByteSize() const override;
-
-        /**
-         * @throws std::logic_error If the target label is not bound to any instruction.
-         */
-        void toBinary(std::ostream& os) const override;
-
     protected:
         /**
          * @brief Construct a 2-byte branch instruction.
@@ -44,6 +37,13 @@ namespace jvm
          * @param label Target label to branch to.
          */
         InstructionJump(AttributeCode* attributeCode, Command command, Label* label);
+
+        /**
+         * @throws std::logic_error If the target label is not bound to any instruction.
+         */
+        void writeTo(std::ostream& os) const override;
+
+        [[nodiscard]] size_t getByteSize() const override;
 
         Label* label_; ///< Target label (non-owning).
     };

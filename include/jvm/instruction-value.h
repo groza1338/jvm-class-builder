@@ -5,6 +5,7 @@
 #include <tuple>
 
 #include "jvm/instruction.h"
+#include "jvm/class-file-element.h"
 #include "jvm/internal/utils.h"
 
 namespace jvm
@@ -31,7 +32,7 @@ namespace jvm
         friend class AttributeCode;
 
     public:
-        [[nodiscard]] uint8_t getByteSize() const override
+        [[nodiscard]] size_t getByteSize() const override
         {
             static_assert(
                 (sizeof(Args) + ...) <= UINT8_MAX,
@@ -41,9 +42,9 @@ namespace jvm
             return Instruction::getByteSize() + (sizeof(Args) + ...);
         }
 
-        void toBinary(std::ostream& os) const override
+        void writeTo(std::ostream& os) const override
         {
-            Instruction::toBinary(os);
+            Instruction::writeTo(os);
 
             std::apply([&os](auto&&... xs)
             {

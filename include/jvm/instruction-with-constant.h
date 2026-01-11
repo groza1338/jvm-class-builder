@@ -23,13 +23,6 @@ namespace jvm
          */
         [[nodiscard]] Constant* getConstant() const;
 
-        /**
-         * @throws std::out_of_range If the reference size is 1 byte and the constant index does not fit.
-         */
-        void toBinary(std::ostream& os) const override;
-
-        [[nodiscard]] uint8_t getByteSize() const override;
-
     protected:
         /**
          * @brief Supported operand sizes for encoding a constant pool index.
@@ -65,6 +58,13 @@ namespace jvm
          * Calls by @ref AttributeCode::finalize.
          */
         virtual void update();
+
+        /**
+         * @throws std::out_of_range If the reference size is 1 byte and the constant index does not fit.
+         */
+        void writeTo(std::ostream& os) const override;
+
+        [[nodiscard]] std::size_t getByteSize() const override;
 
     private:
         Constant* constant_; ///< Referenced constant pool entry.

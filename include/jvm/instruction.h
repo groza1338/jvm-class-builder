@@ -4,6 +4,8 @@
 #include <cstdint>
 #include <iosfwd>
 
+#include "class-file-element.h"
+
 namespace jvm
 {
     class AttributeCode;
@@ -18,13 +20,11 @@ namespace jvm
      *
      * @note Instances are created and managed by @ref AttributeCode.
      */
-    class Instruction
+    class Instruction : public ClassFileElement<AttributeCode>
     {
         friend class AttributeCode;
 
     public:
-        virtual ~Instruction() = default;
-
         enum StrictCompare
         {
             Greater, ///< '>'
@@ -480,23 +480,6 @@ namespace jvm
         [[nodiscard]] Command getCommandCode() const;
 
         /**
-         * @brief Get the encoded size of this instruction in bytes.
-         *
-         * @return Instruction size in bytes.
-         */
-        [[nodiscard]] virtual uint8_t getByteSize() const;
-
-        /**
-         * @brief Serialize the instruction to the binary.
-         *
-         * The base implementation writes only the opcode.
-         * Derived classes should call @ref Instruction::toBinary first and then write their operands.
-         *
-         * @param os Output stream.
-         */
-        virtual void toBinary(std::ostream& os) const;
-
-        /**
          * @brief Check whether a bytecode position has been assigned to this instruction.
          *
          * The position is assigned by @ref AttributeCode during code layout.
@@ -512,13 +495,6 @@ namespace jvm
          * @throws std::logic_error if position is not set (typically checked via @ref isIndexSet).
          */
         [[nodiscard]] uint16_t getIndex() const;
-
-        /**
-         * @brief Get the owning code attribute.
-         *
-         * @return The @ref AttributeCode instance that owns this instruction.
-         */
-        [[nodiscard]] AttributeCode* getAttributeCodeOwner() const;
 
     protected:
         /**
@@ -545,6 +521,10 @@ namespace jvm
          */
         [[nodiscard]] uint16_t calculateShift(Instruction* target) const;
 
+        [[nodiscard]] std::size_t getByteSize() const override;
+
+        void writeTo(std::ostream& os) const override;
+
     private:
         /**
          * @brief Assign a bytecode position to this instruction.
@@ -563,10 +543,7 @@ namespace jvm
         Command command_; ///< Opcode of this instruction.
         uint16_t index_ = 0; ///< Bytecode position assigned during layout.
         bool isIndexSet_ = false; ///< True if @ref index_ is valid.
-        AttributeCode* attributeCodeOwner_; ///< Owning code attribute.
     };
-
-    std::ostream& operator<<(std::ostream& os, const Instruction& instruction);
 } // jvm
 
 #endif //JVM__INSTRUCTION_H
