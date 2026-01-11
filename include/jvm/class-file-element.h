@@ -5,6 +5,7 @@
 #include <cstddef>
 #include <iosfwd>
 
+#include "owner-aware.h"
 #include "serializable.h"
 
 namespace jvm
@@ -14,19 +15,13 @@ namespace jvm
      *
      * @tparam Owner Type of the logical owner of this element.
      *
-     * This class represents a structural element of a class file that:
-     * - belongs to a specific owner object,
-     * - participates in binary serialization,
-     * - enforces a strict ownership relationship.
-     *
-     * The owner pointer is stored explicitly and must be non-null.
      * Copying is disabled to preserve unique ownership semantics.
      *
      * @note The owner type is declared as a friend to allow controlled construction
      *       and internal modification.
      */
     template <class Owner>
-    class ClassFileElement : protected Serializable
+    class ClassFileElement : public OwnerAware<Owner>, protected Serializable
     {
         friend Owner;
 
@@ -37,23 +32,16 @@ namespace jvm
          * @param owner Pointer to the owning object.
          * @pre @p owner must not be null.
          */
-        explicit ClassFileElement(Owner* owner);
+        explicit ClassFileElement(Owner* owner) : OwnerAware<Owner>(owner)
+        {
+        }
 
         /// Copying is disabled to preserve ownership semantics.
         ClassFileElement(const ClassFileElement&) = delete;
         ClassFileElement& operator=(const ClassFileElement&) = delete;
 
-        /// Move operations are allowed.
         ClassFileElement(ClassFileElement&&) = default;
         ClassFileElement& operator=(ClassFileElement&&) = default;
-
-        /**
-         * @return Pointer to the owning object.
-         */
-        [[nodiscard]] Owner* getOwner() const;
-
-    private:
-        Owner* owner_;
     };
 
 
@@ -76,7 +64,6 @@ namespace jvm
         ClassFileElement(ClassFileElement&&) = default;
         ClassFileElement& operator=(ClassFileElement&&) = default;
     };
-
 } // jvm
 
 #endif //JVM__CLASS_FILE_ELEMENT_H
