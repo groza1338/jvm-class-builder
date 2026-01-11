@@ -41,7 +41,7 @@ AttributeCode::~AttributeCode()
         delete label;
     }
 
-    for (auto* attribute: attributes_)
+    for (auto* attribute : attributes_)
     {
         delete attribute;
     }
