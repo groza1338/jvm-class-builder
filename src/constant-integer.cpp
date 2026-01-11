@@ -11,10 +11,15 @@ int32_t ConstantInteger::getValue()
     return value_;
 }
 
-void ConstantInteger::toBinary(std::ostream& os) const
+void ConstantInteger::writeTo(std::ostream& os) const
 {
-    Constant::toBinary(os);
+    Constant::writeTo(os);
     internal::Utils::writeBigEndian(os, value_);
+}
+
+std::size_t ConstantInteger::getByteSize() const
+{
+    return Constant::getByteSize() + sizeof(value_);
 }
 
 ConstantInteger::ConstantInteger(int32_t value, Class* classOwner) : Constant(CONSTANT_Integer, classOwner),

@@ -30,11 +30,9 @@ namespace jvm
         ConstantUtf8Info(std::string string, Class* classOwner);
 
     protected:
-        /**
-         * Write object to output stream.
-         * @param os Output stream.
-         */
-        void toBinary(std::ostream& os) const override;
+        void writeTo(std::ostream& os) const override;
+
+        [[nodiscard]] std::size_t getByteSize() const override;
 
     private:
         /**

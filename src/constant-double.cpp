@@ -17,10 +17,15 @@ uint16_t ConstantDouble::getOccupiedSlots() const
     return 2;
 }
 
-void ConstantDouble::toBinary(std::ostream& os) const
+void ConstantDouble::writeTo(std::ostream& os) const
 {
-    Constant::toBinary(os);
+    Constant::writeTo(os);
     internal::Utils::writeBigEndian(os, value_);
+}
+
+std::size_t ConstantDouble::getByteSize() const
+{
+    return Constant::getByteSize() + 8;
 }
 
 ConstantDouble::ConstantDouble(double value, Class* classOwner)

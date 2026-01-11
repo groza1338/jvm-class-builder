@@ -63,8 +63,8 @@ AttributeCode* Method::getCodeAttribute()
 
 Method::Method(ConstantUtf8Info* name, ConstantUtf8Info* descriptor)
 {
-    Class* nameOwner = name->getClassOwner();
-    Class* descriptorOwner = descriptor->getClassOwner();
+    Class* nameOwner = name->getOwner();
+    Class* descriptorOwner = descriptor->getOwner();
     assert(nameOwner == descriptorOwner);
     classOwner_ = nameOwner;
 }

@@ -11,14 +11,19 @@ float ConstantFloat::getValue() const
     return value_;
 }
 
-void ConstantFloat::toBinary(std::ostream& os) const
+void ConstantFloat::writeTo(std::ostream& os) const
 {
-    Constant::toBinary(os);
+    Constant::writeTo(os);
     internal::Utils::writeBigEndian(os, value_);
 }
 
-ConstantFloat::ConstantFloat(float value, Class* classOwner)
-    : Constant(CONSTANT_Float, classOwner),
-      value_(value)
+std::size_t ConstantFloat::getByteSize() const
+{
+    return Constant::getByteSize() + sizeof(value_);
+}
+
+ConstantFloat::ConstantFloat(float value, Class* classOwner) :
+    Constant(CONSTANT_Float, classOwner),
+    value_(value)
 {
 }

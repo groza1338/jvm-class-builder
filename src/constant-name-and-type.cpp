@@ -16,20 +16,26 @@ namespace jvm
         return descriptor_;
     }
 
-    void ConstantNameAndType::toBinary(std::ostream& os) const
+    void ConstantNameAndType::writeTo(std::ostream& os) const
     {
-        Constant::toBinary(os);
+        Constant::writeTo(os);
+
         uint16_t nameIndex = name_->getIndex();
         internal::Utils::writeBigEndian(os, nameIndex);
+
         uint16_t descriptorIndex = descriptor_->getIndex();
         internal::Utils::writeBigEndian(os, descriptorIndex);
     }
 
-    ConstantNameAndType::ConstantNameAndType(ConstantUtf8Info* name, ConstantUtf8Info* descriptor) :
-        Constant(CONSTANT_NameAndType, name->getClassOwner()), name_(name), descriptor_(descriptor)
+    std::size_t ConstantNameAndType::getByteSize() const
     {
-        Class* nameClassOwner = name->getClassOwner();
-        Class* descriptorClassOwner = descriptor->getClassOwner();
-        assert(nameClassOwner == descriptorClassOwner);
+        return Constant::getByteSize() + 4;
+    }
+
+    ConstantNameAndType::ConstantNameAndType(ConstantUtf8Info* name, ConstantUtf8Info* descriptor) :
+        Constant(CONSTANT_NameAndType, name->getOwner()), name_(name), descriptor_(descriptor)
+    {
+        bool equalClassOwners = name->getOwner() == descriptor->getOwner();
+        assert(equalClassOwners);
     }
 } // jvm

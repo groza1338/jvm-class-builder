@@ -9,8 +9,8 @@ using namespace jvm;
 
 Field::Field(ConstantUtf8Info* name, ConstantUtf8Info* descriptor) : name_(name), descriptor_(descriptor)
 {
-    Class* nameOwner = name->getClassOwner();
-    Class* descriptorOwner = descriptor->getClassOwner();
+    Class* nameOwner = name->getOwner();
+    Class* descriptorOwner = descriptor->getOwner();
     assert(nameOwner == descriptorOwner);
     classOwner_ = nameOwner;
 }

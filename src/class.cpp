@@ -35,7 +35,7 @@ ConstantClass* Class::getOrCreateClassConstant(const std::string& name)
 
 ConstantClass* Class::getOrCreateClassConstant(ConstantUtf8Info* name)
 {
-    assert(this == name->getClassOwner());
+    assert(this == name->getOwner());
 
     // try search constant
     for (auto* constant : constants_)
@@ -76,8 +76,8 @@ ConstantFieldref* Class::getOrCreateFieldrefConstant(const std::string& classNam
 ConstantFieldref* Class::getOrCreateFieldrefConstant(ConstantClass* classConstant,
                                                      ConstantNameAndType* nameAndTypeConstant)
 {
-    assert(this == classConstant->getClassOwner());
-    assert(this == nameAndTypeConstant -> getClassOwner());
+    assert(this == classConstant->getOwner());
+    assert(this == nameAndTypeConstant -> getOwner());
 
     // search constant
     for (auto* constant : constants_)
@@ -119,8 +119,8 @@ ConstantMethodref* Class::getOrCreateMethodrefConstant(const std::string& classN
 ConstantMethodref* Class::getOrCreateMethodrefConstant(ConstantClass* classConstant,
                                                        ConstantNameAndType* nameAndTypeConstant)
 {
-    assert(this == classConstant->getClassOwner());
-    assert(this == nameAndTypeConstant->getClassOwner());
+    assert(this == classConstant->getOwner());
+    assert(this == nameAndTypeConstant->getOwner());
 
     // search constant
     for (auto* constant : constants_)
@@ -163,8 +163,8 @@ ConstantInterfaceMethodref* Class::getOrCreateInterfaceMethodrefConstant(const s
 ConstantInterfaceMethodref* Class::getOrCreateInterfaceMethodrefConstant(ConstantClass* classConstant,
                                                                          ConstantNameAndType* nameAndTypeConstant)
 {
-    assert(this == classConstant->getClassOwner());
-    assert(this == nameAndTypeConstant->getClassOwner());
+    assert(this == classConstant->getOwner());
+    assert(this == nameAndTypeConstant->getOwner());
 
     // search constant
     for (auto* constant : constants_)
@@ -196,7 +196,7 @@ ConstantString* Class::getOrCreateStringConstant(const std::string& value)
 
 ConstantString* Class::getOrCreateStringConstant(ConstantUtf8Info* utf8Constant)
 {
-    assert(this == utf8Constant->getClassOwner());
+    assert(this == utf8Constant->getOwner());
 
     // search constant
     for (auto* constant : constants_)
@@ -316,7 +316,7 @@ ConstantNameAndType* Class::getOrCreateNameAndTypeConstant(const std::string& na
 ConstantNameAndType* Class::getOrCreateNameAndTypeConstant(const std::string& name,
                                                            ConstantUtf8Info* descriptorConstant)
 {
-    assert(this == descriptorConstant->getClassOwner());
+    assert(this == descriptorConstant->getOwner());
 
     ConstantUtf8Info* nameConstant = getOrCreateUtf8Constant(name);
     return getOrCreateNameAndTypeConstant(nameConstant, descriptorConstant);
@@ -331,7 +331,7 @@ ConstantNameAndType* Class::getOrCreateNameAndTypeConstant(const std::string& na
 
 ConstantNameAndType* Class::getOrCreateNameAndTypeConstant(ConstantUtf8Info* nameConstant, const Descriptor& descriptor)
 {
-    assert(this == nameConstant->getClassOwner());
+    assert(this == nameConstant->getOwner());
 
     ConstantUtf8Info* descriptorConstant = getOrCreateUtf8Constant(descriptor.toString());
     return getOrCreateNameAndTypeConstant(nameConstant, descriptorConstant);
@@ -340,7 +340,7 @@ ConstantNameAndType* Class::getOrCreateNameAndTypeConstant(ConstantUtf8Info* nam
 ConstantNameAndType* Class::getOrCreateNameAndTypeConstant(ConstantUtf8Info* nameConstant,
                                                            const std::string& descriptor)
 {
-    assert(this == nameConstant->getClassOwner());
+    assert(this == nameConstant->getOwner());
 
     ConstantUtf8Info* descriptorConstant = getOrCreateUtf8Constant(descriptor);
     return getOrCreateNameAndTypeConstant(nameConstant, descriptorConstant);
@@ -349,8 +349,8 @@ ConstantNameAndType* Class::getOrCreateNameAndTypeConstant(ConstantUtf8Info* nam
 ConstantNameAndType* Class::getOrCreateNameAndTypeConstant(ConstantUtf8Info* nameConstant,
                                                            ConstantUtf8Info* descriptorConstant)
 {
-    assert(this == nameConstant->getClassOwner());
-    assert(this == descriptorConstant->getClassOwner());
+    assert(this == nameConstant->getOwner());
+    assert(this == descriptorConstant->getOwner());
 
     // search constant
     for (auto* constant : constants_)
@@ -404,8 +404,8 @@ Method* Class::getOrCreateMethod(const std::string& name, const std::string& des
 
 Method* Class::getOrCreateMethod(ConstantUtf8Info* name, ConstantUtf8Info* descriptor)
 {
-    assert(this == name->getClassOwner());
-    assert(this == descriptor->getClassOwner());
+    assert(this == name->getOwner());
+    assert(this == descriptor->getOwner());
 
     // search method
     for (auto* method : methods_)

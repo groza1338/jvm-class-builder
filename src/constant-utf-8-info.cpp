@@ -16,10 +16,15 @@ ConstantUtf8Info::ConstantUtf8Info(std::string string, Class* classOwner) :
 {
 }
 
-void ConstantUtf8Info::toBinary(std::ostream& os) const
+void ConstantUtf8Info::writeTo(std::ostream& os) const
 {
-    Constant::toBinary(os);
+    Constant::writeTo(os);
     uint16_t size = string_.size();
     internal::Utils::writeBigEndian(os, size);
     os.write(string_.c_str(), size);
+}
+
+std::size_t ConstantUtf8Info::getByteSize() const
+{
+    return Constant::getByteSize() + sizeof(uint16_t) + string_.size();
 }

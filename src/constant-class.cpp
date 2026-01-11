@@ -11,13 +11,18 @@ ConstantUtf8Info* ConstantClass::getName() const
     return name_;
 }
 
-void ConstantClass::toBinary(std::ostream& os) const
+void ConstantClass::writeTo(std::ostream& os) const
 {
-    Constant::toBinary(os);
+    Constant::writeTo(os);
     uint16_t nameIndex = name_->getIndex();
     internal::Utils::writeBigEndian(os, nameIndex);
 }
 
-ConstantClass::ConstantClass(ConstantUtf8Info* name) : Constant(CONSTANT_Class, name->getClassOwner()), name_(name)
+std::size_t ConstantClass::getByteSize() const
+{
+    return Constant::getByteSize() + 2;
+}
+
+ConstantClass::ConstantClass(ConstantUtf8Info* name) : Constant(CONSTANT_Class, name->getOwner()), name_(name)
 {
 }

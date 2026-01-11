@@ -2,6 +2,8 @@
 
 #include <ostream>
 
+#include "jvm/internal/utils.h"
+
 using namespace jvm;
 
 
@@ -20,27 +22,16 @@ uint16_t Constant::getIndex() const
     return index_;
 }
 
-Class* Constant::getClassOwner() const
-{
-    return classOwner_;
-}
-
-Constant::Constant(Tag tag, Class* classOwner) : tag_(tag), classOwner_(classOwner)
+Constant::Constant(Tag tag, Class* classOwner) : ClassFileElement(classOwner), tag_(tag)
 {
 }
 
-void Constant::toBinary(std::ostream& os) const
+void Constant::writeTo(std::ostream& os) const
 {
-    os.write(reinterpret_cast<const char*>(&tag_), sizeof(tag_));
+    internal::Utils::writeBigEndian(os, tag_);
 }
 
 void Constant::setIndex(uint32_t index)
 {
     index_ = index;
-}
-
-std::ostream& jvm::operator<<(std::ostream& os, const Constant& constant)
-{
-    constant.toBinary(os);
-    return os;
 }

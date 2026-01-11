@@ -2,6 +2,8 @@
 #define JVM__CONSTANT_H
 
 #include <cstdint>
+
+#include "class-file-element.h"
 #include "class.h"
 
 namespace jvm
@@ -9,18 +11,10 @@ namespace jvm
     /**
      * Base class of constant.
      */
-    class Constant
+    class Constant : public ClassFileElement<Class>
     {
-        // friend class and operators
         friend class Class;
-        friend std::ostream& operator<<(std::ostream& os, const Constant& constant);
-
     public:
-        /**
-         * Destructor.
-         */
-        virtual ~Constant() = default;
-
         /**
          * Constant values tag.
          */
@@ -60,11 +54,6 @@ namespace jvm
          */
         uint16_t getIndex() const;
 
-        /**
-         * @return Constant owner class.
-         */
-        Class* getClassOwner() const;
-
     protected:
         /**
          * Create constant with tag and class owner.
@@ -74,11 +63,9 @@ namespace jvm
          */
         explicit Constant(Tag tag, Class* classOwner);
 
-        /**
-         * Write object to binary stream.
-         * @param os Output stream.
-         */
-        virtual void toBinary(std::ostream& os) const;
+        void writeTo(std::ostream& os) const override;
+
+        [[nodiscard]] std::size_t getByteSize() const override { return 1; };
 
     private:
         /**
@@ -88,15 +75,6 @@ namespace jvm
 
         Tag tag_; ///< Tag of constant.
         uint16_t index_ = 0; ///< Index in the table of constants.
-        Class* classOwner_ = nullptr; ///< Class owner.
     };
-
-    /**
-     * Write constant to binary output stream.
-     * @param os Output stream.
-     * @param constant Constant object.
-     * @return Output stream.
-     */
-    std::ostream& operator<<(std::ostream& os, const Constant& constant);
 }
 #endif //JVM__CONSTANT_H

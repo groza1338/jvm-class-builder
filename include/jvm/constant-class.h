@@ -20,7 +20,9 @@ namespace jvm
         ConstantUtf8Info* getName() const;
 
     protected:
-        void toBinary(std::ostream& os) const override;
+        void writeTo(std::ostream& os) const override;
+
+        [[nodiscard]] std::size_t getByteSize() const override;
 
     private:
         /**
