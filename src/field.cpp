@@ -4,21 +4,17 @@
 #include <ostream>
 #include <utility>
 
+#include "jvm/attribute.h"
+#include "jvm/internal/utils.h"
+
 using namespace jvm;
 
 
-Field::Field(ConstantUtf8Info* name, ConstantUtf8Info* descriptor) : name_(name), descriptor_(descriptor)
+Field::Field(ConstantUtf8Info* name, ConstantUtf8Info* descriptor) :
+    ClassFileElement(name->getOwner()), name_(name), descriptor_(descriptor)
 {
-    Class* nameOwner = name->getOwner();
-    Class* descriptorOwner = descriptor->getOwner();
-    assert(nameOwner == descriptorOwner);
-    classOwner_ = nameOwner;
-}
-
-Field::Field(std::string name, std::string descriptor, Class* classOwner) : classOwner_(classOwner)
-{
-    name_ = classOwner_->getOrCreateUtf8Constant(name);
-    descriptor_ = classOwner_->getOrCreateUtf8Constant(descriptor);
+    bool equalClassOwner = name->getOwner() == descriptor->getOwner();
+    assert(equalClassOwner);
 }
 
 void Field::addFlag(AccessFlag flag)
@@ -61,13 +57,7 @@ const std::set<Attribute*>* Field::getAttributes() const
     return &attributes_;
 }
 
-Class* Field::getClass() const
-{
-    return classOwner_;
-}
-
-
-void Field::toBinary(std::ostream& os) const
+void Field::writeTo(std::ostream& os) const
 {
     // u2             access_flags;
     uint16_t accessFlags = 0x0000;
@@ -75,29 +65,34 @@ void Field::toBinary(std::ostream& os) const
     {
         accessFlags = accessFlags | flag;
     }
-    os.write(reinterpret_cast<const char*>(&accessFlags), sizeof(accessFlags));
+    internal::Utils::writeBigEndian(os, accessFlags);
 
     // u2             name_index;
     uint16_t nameIndex = name_->getIndex();
-    os.write(reinterpret_cast<const char*>(&nameIndex), sizeof(nameIndex));
+    internal::Utils::writeBigEndian(os, nameIndex);
 
     // u2             descriptor_index;
     uint16_t descriptorIndex = descriptor_->getIndex();
+    internal::Utils::writeBigEndian(os, descriptorIndex);
     os.write(reinterpret_cast<const char*>(&descriptorIndex), sizeof(descriptorIndex));
 
     // u2             attributes_count;
     uint16_t attributeCount = attributes_.size();
-    os.write(reinterpret_cast<const char*>(&attributeCount), sizeof(attributeCount));
+    internal::Utils::writeBigEndian(os, attributeCount);
 
     // attribute_info attributes[attributes_count];
-    for (auto attribute : attributes_)
+    for (auto* attribute : attributes_)
     {
-        os << attribute;
+        os << *attribute;
     }
 }
 
-std::ostream& jvm::operator<<(std::ostream& os, const Field& field)
+std::size_t Field::getByteSize() const
 {
-    field.toBinary(os);
-    return os;
+    size_t size = sizeof(AccessFlag) + sizeof(uint16_t) + sizeof(uint16_t) + sizeof(uint16_t);
+    for (auto* attribute : attributes_)
+    {
+        size += attribute->getByteSize();
+    }
+    return size;
 }

@@ -2,16 +2,16 @@
 #define JVM__FIELD_H
 #include <iosfwd>
 
+#include "class-file-element.h"
 #include "constant-utf-8-info.h"
 
 namespace jvm
 {
     class Attribute;
 
-    class Field
+    class Field final : public ClassFileElement<Class>
     {
-        friend std::ostream& operator<<(std::ostream& os, const Field& field);
-
+        friend class Class;
     public:
         enum AccessFlag
         {
@@ -26,22 +26,6 @@ namespace jvm
             ACC_SYNTHETIC = 0x1000, ///< Declared synthetic; not present in the source code.
             ACC_ENUM = 0x4000, ///< Declared as an element of an enum class.
         };
-
-        /**
-         * Create field with selected name and descriptor.
-         * @param name Pointer to UTF-8 constant with field name.
-         * @param descriptor Pointer to UTF-8 constant with field descriptor.
-         * @note The name and descriptor must belong to the same  owner.
-         */
-        Field(ConstantUtf8Info* name, ConstantUtf8Info* descriptor);
-
-        /**
-         * Create field with selected name, descriptor and classOwner.
-         * @param name Field name string.
-         * @param descriptor Field descriptor string.
-         * @param classOwner Pointer to class owner.
-         */
-        Field(std::string name, std::string descriptor, Class* classOwner);
 
         /**
          * Add access flag to field.
@@ -92,21 +76,25 @@ namespace jvm
          */
         [[nodiscard]] Class* getClass() const;
 
+    protected:
+        void writeTo(std::ostream& os) const override;
+
+        [[nodiscard]] std::size_t getByteSize() const override;
+
     private:
         /**
-         * Write object to binary stream.
-         * @param os Output stream.
+         * Create field with selected name and descriptor.
+         * @param name Pointer to UTF-8 constant with field name.
+         * @param descriptor Pointer to UTF-8 constant with field descriptor.
+         * @note The name and descriptor must belong to the same  owner.
          */
-        void toBinary(std::ostream& os) const;
+        Field(ConstantUtf8Info* name, ConstantUtf8Info* descriptor);
 
         std::set<AccessFlag> accessFlags_{}; ///< Access flags.
         ConstantUtf8Info* name_ = nullptr; ///< String constant with field name.
         ConstantUtf8Info* descriptor_ = nullptr; ///< String constant with field descriptor.
         std::set<Attribute*> attributes_{}; ///< Attributes.
-        Class* classOwner_ = nullptr;
     };
-
-    std::ostream& operator<<(std::ostream& os, const Field& field);
 } // jvm
 
 #endif //JVM__FIELD_H
