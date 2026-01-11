@@ -10,6 +10,7 @@ option(BUILD_SHARED_LIBS "Build libraries as shared" OFF)
 
 add_library(jvm-class-builder
         include/jvm/serializable.h
+        include/jvm/owner-aware.h
         src/class.cpp
         src/constant.cpp
         src/constant-utf-8-info.cpp
