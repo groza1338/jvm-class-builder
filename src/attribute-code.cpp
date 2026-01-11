@@ -87,7 +87,7 @@ Instruction* AttributeCode::PushInt(int32_t value)
             }
             if (INT32_MIN <= value && value <= INT32_MAX)
             {
-                auto* integerConstant = getMethodOwner()->getClassOwner()->getOrCreateIntegerConstant(value);
+                auto* integerConstant = getOwner()->getClassOwner()->getOrCreateIntegerConstant(value);
                 return new InstructionLdc(this, integerConstant);
             }
             throw std::runtime_error("Unsupported integer value.");
@@ -104,7 +104,7 @@ Instruction* AttributeCode::PushLong(int64_t value)
     case 1:
         return new Instruction(this, Instruction::INSTRUCTION_lconst_1);
     default:
-        auto* longConstant = getMethodOwner()->getClassOwner()->getOrCreateLongConstant(value);
+        auto* longConstant = getOwner()->getClassOwner()->getOrCreateLongConstant(value);
         return new InstructionLdc(this, longConstant);
     }
 }
@@ -123,7 +123,7 @@ Instruction* AttributeCode::PushFloat(float value)
     {
         return new Instruction(this, Instruction::INSTRUCTION_fconst_2);
     }
-    auto* floatConstant = getMethodOwner()->getClassOwner()->getOrCreateFloatConstant(value);
+    auto* floatConstant = getOwner()->getClassOwner()->getOrCreateFloatConstant(value);
     return new InstructionLdc(this, floatConstant);
 }
 
@@ -137,7 +137,7 @@ Instruction* AttributeCode::PushDouble(double value)
     {
         return new Instruction(this, Instruction::INSTRUCTION_dconst_1);
     }
-    auto* doubleConstant = getMethodOwner()->getClassOwner()->getOrCreateDoubleConstant(value);
+    auto* doubleConstant = getOwner()->getClassOwner()->getOrCreateDoubleConstant(value);
     return new InstructionLdc(this, doubleConstant);
 }
 
@@ -1161,12 +1161,47 @@ ExceptionHandler* AttributeCode::addTryCatch(Label* tryStartLabel, Label* tryFin
     return handler;
 }
 
-bool AttributeCode::isMethodAttribute() const noexcept
+void AttributeCode::writeTo(std::ostream& os) const
 {
-    return true;
+    REQUIRE_FINALIZED();
+
+    Attribute::writeTo(os);
+
+    // u2 max_stack;
+    internal::Utils::writeBigEndian(os, static_cast<uint16_t>(maxStack_));
+
+    // u2 max_locals;
+    internal::Utils::writeBigEndian(os, static_cast<uint16_t>(maxLocals_));
+
+    // u4 code_length;
+    internal::Utils::writeBigEndian(os, static_cast<uint32_t>(instructionsByteSize_));
+
+    // u1 code[code_length];
+    for (auto* instruction : code_)
+    {
+        os << *instruction;
+    }
+
+    // u2 exception_table_length;
+    internal::Utils::writeBigEndian(os, static_cast<uint16_t>(exceptionHandlers_.size()));
+
+    // exception_table[exception_table_length];
+    for (auto* handler : exceptionHandlers_)
+    {
+        os << *handler;
+    }
+
+    // u2 attributes_count;
+    internal::Utils::writeBigEndian(os, static_cast<uint16_t>(attributes_.size()));
+
+    // attribute_info attributes[attributes_count];
+    for (auto* attribute : attributes_)
+    {
+        os << *attribute;
+    }
 }
 
-uint32_t AttributeCode::getAttributeLength() const
+size_t AttributeCode::getContentSizeInBytes() const
 {
     REQUIRE_FINALIZED();
 
@@ -1197,16 +1232,17 @@ uint32_t AttributeCode::getAttributeLength() const
     // attribute_info attributes[attributes_count];
     for (auto* attribute : attributes_)
     {
-        size+= attribute->getAttributeLength();
+        size += attribute->getByteSize();
     }
 
 
     return size;
 }
 
-Method* AttributeCode::getMethodOwner() const
+AttributeCode::AttributeCode(Method* methodOwner) :
+    Attribute(methodOwner->getClassOwner()->getOrCreateUtf8Constant("Code")),
+    ClassFileElement(methodOwner)
 {
-    return methodOwner_;
 }
 
 bool AttributeCode::isFinalized() const
@@ -1263,48 +1299,3 @@ void AttributeCode::finalize()
     // finalize code attribute
     isFinalized_ = true;
 }
-
-AttributeCode::AttributeCode(Method* methodOwner) : methodOwner_(methodOwner)
-{
-}
-
-void AttributeCode::toBinary(std::ostream& os) const
-{
-    REQUIRE_FINALIZED();
-
-    Attribute::toBinary(os);
-
-    // u2 max_stack;
-    internal::Utils::writeBigEndian(os, static_cast<uint16_t>(maxStack_));
-
-    // u2 max_locals;
-    internal::Utils::writeBigEndian(os, static_cast<uint16_t>(maxLocals_));
-
-    // u4 code_length;
-    internal::Utils::writeBigEndian(os, static_cast<uint32_t>(instructionsByteSize_));
-
-    // u1 code[code_length];
-    for (auto* instruction : code_)
-    {
-        os << *instruction;
-    }
-
-    // u2 exception_table_length;
-    internal::Utils::writeBigEndian(os, static_cast<uint16_t>(exceptionsHandlersByteSize_));
-
-    // exception_table[exception_table_length];
-    for (auto* handler : exceptionHandlers_)
-    {
-        os << *handler;
-    }
-
-    // u2 attributes_count;
-    internal::Utils::writeBigEndian(os, static_cast<uint16_t>(attributes_.size()));
-
-    // attribute_info attributes[attributes_count];
-    for (auto* attribute : attributes_)
-    {
-        os << *attribute;
-    }
-}
-

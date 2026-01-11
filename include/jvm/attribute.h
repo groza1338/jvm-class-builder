@@ -3,15 +3,19 @@
 #include <iosfwd>
 
 #include "constant-utf-8-info.h"
+#include "serializable.h"
 
 namespace jvm
 {
-    class Attribute
+    class Attribute : public Serializable
     {
-        friend std::ostream& operator<<(std::ostream& os, const Attribute& attribute);
+        friend class Class;
+        friend class Field;
+        friend class Method;
+        friend class AttributeCode;
 
     public:
-        virtual ~Attribute() = default;
+        Attribute(ConstantUtf8Info* name);
 
         /**
          * @return Attribute name constant.
@@ -48,24 +52,16 @@ namespace jvm
          */
         [[nodiscard]] virtual bool isCodeAttribute() const noexcept { return false; }
 
-        /**
-         * Length of attribute in bytes.
-         * @return Size in bytes.
-         */
-        [[nodiscard]] virtual uint32_t getAttributeLength() const = 0;
-
     protected:
-        /**
-         * Write object to binary stream.
-         * @param os Output stream.
-         */
-        virtual void toBinary(std::ostream& os) const;
+        void writeTo(std::ostream& os) const override;
+
+        [[nodiscard]] size_t getByteSize() const override;
+
+        [[nodiscard]] virtual size_t getContentSizeInBytes() const = 0;
 
     private:
         ConstantUtf8Info* name_ = nullptr; ///< Attribute name constant.
     };
-
-    std::ostream& operator<<(std::ostream& os, const Attribute& attribute);
 } // jvm
 
 #endif //JVM__ATTRIBUTE_H

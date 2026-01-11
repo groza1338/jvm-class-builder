@@ -42,7 +42,7 @@ namespace jvm
      * *code << L << I;                          // ownership transferred to AttributeCode
      * @endcode
      */
-    class AttributeCode final : public Attribute
+    class AttributeCode final : public Attribute, public ClassFileElement<Method>
     {
         friend class Method;
 
@@ -3290,7 +3290,7 @@ namespace jvm
 
         // endregion
         // endregion
-        // region LABEL 
+        // region LABEL
         // region STATIC CONSTRUCTORS
 
         /**
@@ -3308,7 +3308,7 @@ namespace jvm
         Label* CodeLabel();
 
 
-        // endregion 
+        // endregion
         // region ADD TO CODE
 
         /**
@@ -3399,9 +3399,6 @@ namespace jvm
         }
 
         //endregion
-        // region OWNER
-        [[nodiscard]] Method* getMethodOwner() const;
-        // endregion
         // region FINALIZATION
         /**
          * @brief Check whether the code attribute is finalized.
@@ -3423,22 +3420,21 @@ namespace jvm
         // region ATTRIBUTES
         // ToDo operations with code's attributes are not implemented
         // endregion
-        // region OVERLOADS
-        [[nodiscard]] bool isMethodAttribute() const noexcept override;
 
-        /**
-         * @pre The attribute must be finalized via @ref finalize.
-         * @throws std::logic_error If called before finalization.
-         */
-        [[nodiscard]] uint32_t getAttributeLength() const override;
-        //endregion
+        [[nodiscard]] bool isMethodAttribute() const noexcept override { return true; };
 
     protected:
         /**
          * @pre The attribute must be finalized via @ref finalize.
          * @throws std::logic_error If called before finalization.
          */
-        void toBinary(std::ostream& os) const override;
+        void writeTo(std::ostream& os) const override;
+
+        /**
+         * @pre The attribute must be finalized via @ref finalize.
+         * @throws std::logic_error If called before finalization.
+         */
+        [[nodiscard]] size_t getContentSizeInBytes() const override;
 
     private:
         /**
@@ -3448,7 +3444,10 @@ namespace jvm
          */
         explicit AttributeCode(Method* methodOwner);
 
+    public:
+        [[nodiscard]] std::size_t getByteSize() const override;
 
+    private:
         uint16_t maxStack_ = 0; ///< Max stack size.
         uint16_t maxLocals_ = 0; ///< Max size of local variable array.
         uint16_t instructionsByteSize_ = 0; ///< Size of bytecode instruction array measured in bytes.
@@ -3462,8 +3461,6 @@ namespace jvm
 
         bool isFinalized_ = false; ///< Flag of completed attribute initialization.
         std::set<Label*> allRegisteredLabels_; ///< Registered labels
-
-        Method* methodOwner_; ///< Method owner.
     };
 } // jvm
 
