@@ -65,6 +65,14 @@ ConstantFieldref* Class::getOrCreateFieldrefConstant(const std::string& classNam
     return getOrCreateFieldrefConstant(classConstant, nameAndTypeConstant);
 }
 
+ConstantFieldref* Class::getOrCreateFieldrefConstant(const std::string& className, const std::string& fieldName,
+    const Descriptor& fieldDescriptor)
+{
+    ConstantClass* classConstant = getOrCreateClassConstant(className);
+    ConstantNameAndType* nameAndTypeConstant = getOrCreateNameAndTypeConstant(fieldName, fieldDescriptor);
+    return getOrCreateFieldrefConstant(classConstant, nameAndTypeConstant);
+}
+
 ConstantFieldref* Class::getOrCreateFieldrefConstant(ConstantClass* classConstant,
                                                      ConstantNameAndType* nameAndTypeConstant)
 {
@@ -94,6 +102,14 @@ ConstantFieldref* Class::getOrCreateFieldrefConstant(ConstantClass* classConstan
 
 ConstantMethodref* Class::getOrCreateMethodrefConstant(const std::string& className, const std::string& methodName,
                                                        const std::string& methodDescriptor)
+{
+    ConstantClass* classConstant = getOrCreateClassConstant(className);
+    ConstantNameAndType* nameAndTypeConstant = getOrCreateNameAndTypeConstant(methodName, methodDescriptor);
+    return getOrCreateMethodrefConstant(classConstant, nameAndTypeConstant);
+}
+
+ConstantMethodref* Class::getOrCreateMethodrefConstant(const std::string& className, const std::string& methodName,
+    const Descriptor& methodDescriptor)
 {
     ConstantClass* classConstant = getOrCreateClassConstant(className);
     ConstantNameAndType* nameAndTypeConstant = getOrCreateNameAndTypeConstant(methodName, methodDescriptor);
@@ -130,6 +146,14 @@ ConstantMethodref* Class::getOrCreateMethodrefConstant(ConstantClass* classConst
 ConstantInterfaceMethodref* Class::getOrCreateInterfaceMethodrefConstant(const std::string& className,
                                                                          const std::string& methodName,
                                                                          const std::string& methodDescriptor)
+{
+    ConstantClass* classConstant = getOrCreateClassConstant(className);
+    ConstantNameAndType* nameAndTypeConstant = getOrCreateNameAndTypeConstant(methodName, methodDescriptor);
+    return getOrCreateInterfaceMethodrefConstant(classConstant, nameAndTypeConstant);
+}
+
+ConstantInterfaceMethodref* Class::getOrCreateInterfaceMethodrefConstant(const std::string& className,
+    const std::string& methodName, const Descriptor& methodDescriptor)
 {
     ConstantClass* classConstant = getOrCreateClassConstant(className);
     ConstantNameAndType* nameAndTypeConstant = getOrCreateNameAndTypeConstant(methodName, methodDescriptor);

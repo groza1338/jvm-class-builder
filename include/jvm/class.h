@@ -107,6 +107,18 @@ namespace Jvm
         /**
          * @brief Returns an existing @ref ConstantFieldref "Fieldref constant" from this class's constant pool,
          *        or creates and returns a new one.
+         * @note May create @ref ConstantClass and @ref ConstantNameAndType entries as needed.
+         * @param className Class internal name (e.g. "java/lang/System").
+         * @param fieldName Field name.
+         * @param fieldDescriptor Descriptor object representing a field descriptor.
+         * @return Fieldref constant.
+         */
+        ConstantFieldref* getOrCreateFieldrefConstant(const std::string& className, const std::string& fieldName,
+                                                      const Descriptor& fieldDescriptor);
+
+        /**
+         * @brief Returns an existing @ref ConstantFieldref "Fieldref constant" from this class's constant pool,
+         *        or creates and returns a new one.
          * @note The provided constants must have this @c Class instance as their owner.
          * @param classConstant Class constant.
          * @param nameAndTypeConstant Name-and-type constant for the field.
@@ -134,6 +146,18 @@ namespace Jvm
         /**
          * @brief Returns an existing @ref ConstantMethodref "Methodref constant" from this class's constant pool,
          *        or creates and returns a new one.
+         * @note May create @ref ConstantClass and @ref ConstantNameAndType entries as needed.
+         * @param className Class internal name (e.g. "java/lang/String").
+         * @param methodName Method name (e.g. "hashCode", "&lt;init&gt;", "&lt;clinit&gt;").
+         * @param methodDescriptor Descriptor object representing a method descriptor.
+         * @return Methodref constant.
+         */
+        ConstantMethodref* getOrCreateMethodrefConstant(const std::string& className, const std::string& methodName,
+                                                        const Descriptor& methodDescriptor);
+
+        /**
+         * @brief Returns an existing @ref ConstantMethodref "Methodref constant" from this class's constant pool,
+         *        or creates and returns a new one.
          * @note The provided constants must have this @c Class instance as their owner.
          * @param classConstant Class constant.
          * @param nameAndTypeConstant Name-and-type constant for the method.
@@ -157,6 +181,18 @@ namespace Jvm
         ConstantInterfaceMethodref* getOrCreateInterfaceMethodrefConstant(const std::string& className,
                                                                           const std::string& methodName,
                                                                           const std::string& methodDescriptor);
+
+        /**
+         * @brief Returns an existing @ref ConstantInterfaceMethodref "InterfaceMethodref constant" from this class's constant pool,
+         *        or creates and returns a new one.
+         * @note May create @ref ConstantClass and @ref ConstantNameAndType entries as needed.
+         * @param className Interface internal name (e.g. "java/lang/Runnable").
+         * @param methodName Interface method name.
+         * @param methodDescriptor Descriptor object representing a method descriptor.
+         * @return Interface methodref constant.
+         */
+        ConstantInterfaceMethodref* getOrCreateInterfaceMethodrefConstant(
+            const std::string& className, const std::string& methodName, const Descriptor& methodDescriptor);
 
         /**
          * @brief Returns an existing @ref ConstantInterfaceMethodref "InterfaceMethodref constant" from this class's constant pool,
@@ -280,7 +316,8 @@ namespace Jvm
          * @param descriptor Descriptor object representing a field or method descriptor.
          * @return Name-and-type constant.
          */
-        ConstantNameAndType* getOrCreateNameAndTypeConstant(ConstantUtf8Info* nameConstant, const Descriptor& descriptor);
+        ConstantNameAndType* getOrCreateNameAndTypeConstant(ConstantUtf8Info* nameConstant,
+                                                            const Descriptor& descriptor);
 
 
         /**
