@@ -70,8 +70,7 @@ namespace jvm
 
         Class(std::string name);
 
-        /* GET OR CREATE CLASS CONSTANT */
-
+        //region GET OR CREATE CLASS CONSTANT
         /**
          * @brief Returns an existing @ref ConstantClass "Class constant" from this class's constant pool,
          *        or creates and returns a new one.
@@ -89,10 +88,8 @@ namespace jvm
          * @return Class constant.
          */
         ConstantClass* getOrCreateClassConstant(ConstantUtf8Info* name);
-
-
-        /* GET OR CREATE FIELDREF CONSTANT */
-
+        //endregion
+        //region GET OR CREATE FIELDREF CONSTANT
         /**
          * @brief Returns an existing @ref ConstantFieldref "Fieldref constant" from this class's constant pool,
          *        or creates and returns a new one.
@@ -128,10 +125,8 @@ namespace jvm
          */
         ConstantFieldref* getOrCreateFieldrefConstant(ConstantClass* classConstant,
                                                       ConstantNameAndType* nameAndTypeConstant);
-
-
-        /* GET OR CREATE METHODREF CONSTANT */
-
+        //endregion
+        //region GET OR CREATE METHODREF CONSTANT
         /**
          * @brief Returns an existing @ref ConstantMethodref "Methodref constant" from this class's constant pool,
          *        or creates and returns a new one.
@@ -167,10 +162,8 @@ namespace jvm
          */
         ConstantMethodref* getOrCreateMethodrefConstant(ConstantClass* classConstant,
                                                         ConstantNameAndType* nameAndTypeConstant);
-
-
-        /* GET OR CREATE INTERFACE METHODREF CONSTANT */
-
+        //endregion
+        //region GET OR CREATE INTERFACE METHODREF CONSTANT
         /**
          * @brief Returns an existing @ref ConstantInterfaceMethodref "InterfaceMethodref constant" from this class's constant pool,
          *        or creates and returns a new one.
@@ -206,10 +199,8 @@ namespace jvm
          */
         ConstantInterfaceMethodref* getOrCreateInterfaceMethodrefConstant(ConstantClass* classConstant,
                                                                           ConstantNameAndType* nameAndTypeConstant);
-
-
-        /* GET OR CREATE STRING CONSTANT */
-
+        //endregion
+        //region GET OR CREATE STRING CONSTANT
         /**
          * @brief Returns an existing @ref ConstantString "String constant" from this class's constant pool,
          *        or creates and returns a new one.
@@ -227,10 +218,8 @@ namespace jvm
          * @return String constant.
          */
         ConstantString* getOrCreateStringConstant(ConstantUtf8Info* utf8Constant);
-
-
-        /* GET OR CREATE INTEGER CONSTANT */
-
+        //endregion
+        //region GET OR CREATE INTEGER CONSTANT
         /**
          * @brief Returns an existing @ref ConstantInteger "Integer constant" from this class's constant pool,
          *        or creates and returns a new one.
@@ -238,10 +227,8 @@ namespace jvm
          * @return Integer constant.
          */
         ConstantInteger* getOrCreateIntegerConstant(int32_t value);
-
-
-        /* GET OR CREATE FLOAT CONSTANT */
-
+        //endregion
+        //region GET OR CREATE FLOAT CONSTANT
         /**
          * @brief Returns an existing @ref ConstantFloat "Float constant" from this class's constant pool,
          *        or creates and returns a new one.
@@ -249,10 +236,8 @@ namespace jvm
          * @return Float constant.
          */
         ConstantFloat* getOrCreateFloatConstant(float value);
-
-
-        /* GET OR CREATE LONG CONSTANT */
-
+        //endregion
+        //region GET OR CREATE LONG CONSTANT
         /**
          * @brief Returns an existing @ref ConstantLong "Long constant" from this class's constant pool,
          *        or creates and returns a new one.
@@ -261,10 +246,8 @@ namespace jvm
          * @return Long constant.
          */
         ConstantLong* getOrCreateLongConstant(int64_t value);
-
-
-        /* GET OR CREATE DOUBLE CONSTANT */
-
+        //endregion
+        //region GET OR CREATE DOUBLE CONSTANT
         /**
          * @brief Returns an existing @ref ConstantDouble "Double constant" from this class's constant pool,
          *        or creates and returns a new one.
@@ -272,10 +255,8 @@ namespace jvm
          * @return Double constant.
          */
         ConstantDouble* getOrCreateDoubleConstant(double value);
-
-
-        /* GET OR CREATE NAME AND TYPE CONSTANT */
-
+        //endregion
+        //region GET OR CREATE NAME AND TYPE CONSTANT
         /**
          * @brief Returns an existing @ref ConstantNameAndType "Name-and-type constant" from this class's constant pool,
          *        or creates and returns a new one.
@@ -344,10 +325,8 @@ namespace jvm
          */
         ConstantNameAndType* getOrCreateNameAndTypeConstant(ConstantUtf8Info* nameConstant,
                                                             ConstantUtf8Info* descriptorConstant);
-
-
-        /* GET OR CREATE UTF-8 CONSTANT */
-
+        //endregion
+        //region GET OR CREATE UTF-8 CONSTANT
         /**
          * @brief Returns an existing @ref ConstantUtf8Info "UTF-8 constant" from this class's constant pool,
          *        or creates and returns a new one.
@@ -355,9 +334,8 @@ namespace jvm
          * @return UTF-8 constant.
          */
         ConstantUtf8Info* getOrCreateUtf8Constant(const std::string& value);
-
-        /* GET OR CREATE METHOD */
-
+        //endregion
+        //region GET OR CREATE METHOD
         /**
          * @brief Returns an existing @ref Method "method" with the specified name and descriptor,
          *        or creates and returns a new one.
@@ -382,6 +360,7 @@ namespace jvm
          * @return Method instance owned by this class.
          */
         Method* getOrCreateMethod(ConstantUtf8Info* name, ConstantUtf8Info* descriptor);
+        //endregion
 
         std::span<Constant*> constants();
 
