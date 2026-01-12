@@ -540,11 +540,11 @@ void Class::writeTo(std::ostream& os) const
     // field_info     fields[fields_count];
     for (const auto& field : fields_)
     {
-        os << field;
+        os << *field;
     }
 
     // u2             methods_count;
-    uint16_t methodsCount = static_cast<uint16_t>(fields_.size());
+    uint16_t methodsCount = static_cast<uint16_t>(methods_.size());
     internal::Utils::writeBigEndian(os, methodsCount);
 
     // method_info    methods[methods_count];
@@ -554,13 +554,13 @@ void Class::writeTo(std::ostream& os) const
     }
 
     // u2             attributes_count;
-    uint16_t attributesCount = static_cast<uint16_t>(fields_.size());
+    uint16_t attributesCount = static_cast<uint16_t>(attributes_.size());
     internal::Utils::writeBigEndian(os, attributesCount);
 
     // attribute_info attributes[attributes_count];
     for (const auto& attribute : attributes_)
     {
-        os << attribute;
+        os << *attribute;
     }
 }
 
