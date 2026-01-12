@@ -67,18 +67,31 @@ ConstantClass* Class::getOrCreateClassConstant(ConstantUtf8Info* name)
 }
 
 ConstantFieldref* Class::getOrCreateFieldrefConstant(const std::string& className, const std::string& fieldName,
-                                                     const std::string& fieldDescriptor)
+    const DescriptorField& fieldDescriptor)
 {
     ConstantClass* classConstant = getOrCreateClassConstant(className);
     ConstantNameAndType* nameAndTypeConstant = getOrCreateNameAndTypeConstant(fieldName, fieldDescriptor);
     return getOrCreateFieldrefConstant(classConstant, nameAndTypeConstant);
 }
 
-ConstantFieldref* Class::getOrCreateFieldrefConstant(const std::string& className, const std::string& fieldName,
-    const Descriptor& fieldDescriptor)
+ConstantFieldref* Class::getOrCreateFieldrefConstant(ConstantClass* classConstant, const std::string& fieldName,
+    const DescriptorField& fieldDescriptor)
 {
-    ConstantClass* classConstant = getOrCreateClassConstant(className);
     ConstantNameAndType* nameAndTypeConstant = getOrCreateNameAndTypeConstant(fieldName, fieldDescriptor);
+    return getOrCreateFieldrefConstant(classConstant, nameAndTypeConstant);
+}
+
+ConstantFieldref* Class::getOrCreateFieldrefConstant(ConstantClass* classConstant, ConstantUtf8Info* fieldNameConstant,
+    const DescriptorField& fieldDescriptor)
+{
+    ConstantNameAndType* nameAndTypeConstant = getOrCreateNameAndTypeConstant(fieldNameConstant, fieldDescriptor);
+    return getOrCreateFieldrefConstant(classConstant, nameAndTypeConstant);
+}
+
+ConstantFieldref* Class::getOrCreateFieldrefConstant(ConstantClass* classConstant, ConstantUtf8Info* fieldNameConstant,
+    ConstantUtf8Info* fieldDescriptorConstant)
+{
+    ConstantNameAndType* nameAndTypeConstant = getOrCreateNameAndTypeConstant(fieldNameConstant, fieldDescriptorConstant);
     return getOrCreateFieldrefConstant(classConstant, nameAndTypeConstant);
 }
 
@@ -109,21 +122,36 @@ ConstantFieldref* Class::getOrCreateFieldrefConstant(ConstantClass* classConstan
     return fieldrefConstant;
 }
 
+
 ConstantMethodref* Class::getOrCreateMethodrefConstant(const std::string& className, const std::string& methodName,
-                                                       const std::string& methodDescriptor)
+    const DescriptorMethod& methodDescriptor)
 {
     ConstantClass* classConstant = getOrCreateClassConstant(className);
     ConstantNameAndType* nameAndTypeConstant = getOrCreateNameAndTypeConstant(methodName, methodDescriptor);
     return getOrCreateMethodrefConstant(classConstant, nameAndTypeConstant);
 }
 
-ConstantMethodref* Class::getOrCreateMethodrefConstant(const std::string& className, const std::string& methodName,
-    const Descriptor& methodDescriptor)
+ConstantMethodref* Class::getOrCreateMethodrefConstant(ConstantClass* classConstant, const std::string& methodName,
+    const DescriptorMethod& methodDescriptor)
 {
-    ConstantClass* classConstant = getOrCreateClassConstant(className);
     ConstantNameAndType* nameAndTypeConstant = getOrCreateNameAndTypeConstant(methodName, methodDescriptor);
     return getOrCreateMethodrefConstant(classConstant, nameAndTypeConstant);
 }
+
+ConstantMethodref* Class::getOrCreateMethodrefConstant(ConstantClass* classConstant, ConstantUtf8Info* methodNameConstant,
+    const DescriptorMethod& methodDescriptor)
+{
+    ConstantNameAndType* nameAndTypeConstant = getOrCreateNameAndTypeConstant(methodNameConstant, methodDescriptor);
+    return getOrCreateMethodrefConstant(classConstant, nameAndTypeConstant);
+}
+
+ConstantMethodref* Class::getOrCreateMethodrefConstant(ConstantClass* classConstant, ConstantUtf8Info* methodNameConstant,
+    ConstantUtf8Info* methodDescriptorConstant)
+{
+    ConstantNameAndType* nameAndTypeConstant = getOrCreateNameAndTypeConstant(methodNameConstant, methodDescriptorConstant);
+    return getOrCreateMethodrefConstant(classConstant, nameAndTypeConstant);
+}
+
 
 ConstantMethodref* Class::getOrCreateMethodrefConstant(ConstantClass* classConstant,
                                                        ConstantNameAndType* nameAndTypeConstant)
@@ -153,19 +181,31 @@ ConstantMethodref* Class::getOrCreateMethodrefConstant(ConstantClass* classConst
 }
 
 ConstantInterfaceMethodref* Class::getOrCreateInterfaceMethodrefConstant(const std::string& className,
-                                                                         const std::string& methodName,
-                                                                         const std::string& methodDescriptor)
+    const std::string& methodName, const DescriptorMethod& methodDescriptor)
 {
     ConstantClass* classConstant = getOrCreateClassConstant(className);
     ConstantNameAndType* nameAndTypeConstant = getOrCreateNameAndTypeConstant(methodName, methodDescriptor);
     return getOrCreateInterfaceMethodrefConstant(classConstant, nameAndTypeConstant);
 }
 
-ConstantInterfaceMethodref* Class::getOrCreateInterfaceMethodrefConstant(const std::string& className,
-    const std::string& methodName, const Descriptor& methodDescriptor)
+ConstantInterfaceMethodref* Class::getOrCreateInterfaceMethodrefConstant(ConstantClass* classConstant,
+    const std::string& methodName, const DescriptorMethod& methodDescriptor)
 {
-    ConstantClass* classConstant = getOrCreateClassConstant(className);
     ConstantNameAndType* nameAndTypeConstant = getOrCreateNameAndTypeConstant(methodName, methodDescriptor);
+    return getOrCreateInterfaceMethodrefConstant(classConstant, nameAndTypeConstant);
+}
+
+ConstantInterfaceMethodref* Class::getOrCreateInterfaceMethodrefConstant(ConstantClass* classConstant,
+    ConstantUtf8Info* methodNameConstant, const DescriptorMethod& methodDescriptor)
+{
+    ConstantNameAndType* nameAndTypeConstant = getOrCreateNameAndTypeConstant(methodNameConstant, methodDescriptor);
+    return getOrCreateInterfaceMethodrefConstant(classConstant, nameAndTypeConstant);
+}
+
+ConstantInterfaceMethodref* Class::getOrCreateInterfaceMethodrefConstant(ConstantClass* classConstant,
+    ConstantUtf8Info* methodNameConstant, ConstantUtf8Info* methodDescriptorConstant)
+{
+    ConstantNameAndType* nameAndTypeConstant = getOrCreateNameAndTypeConstant(methodNameConstant,methodDescriptorConstant);
     return getOrCreateInterfaceMethodrefConstant(classConstant, nameAndTypeConstant);
 }
 
@@ -317,13 +357,6 @@ ConstantDouble* Class::getOrCreateDoubleConstant(double value)
     return doubleConstant;
 }
 
-ConstantNameAndType* Class::getOrCreateNameAndTypeConstant(const std::string& name, const std::string& descriptor)
-{
-    ConstantUtf8Info* nameConstant = getOrCreateUtf8Constant(name);
-    ConstantUtf8Info* descriptorConstant = getOrCreateUtf8Constant(descriptor);
-    return getOrCreateNameAndTypeConstant(nameConstant, descriptorConstant);
-}
-
 ConstantNameAndType* Class::getOrCreateNameAndTypeConstant(const std::string& name,
                                                            ConstantUtf8Info* descriptorConstant)
 {
@@ -345,15 +378,6 @@ ConstantNameAndType* Class::getOrCreateNameAndTypeConstant(ConstantUtf8Info* nam
     assert(this == nameConstant->getOwner());
 
     ConstantUtf8Info* descriptorConstant = getOrCreateUtf8Constant(descriptor.toString());
-    return getOrCreateNameAndTypeConstant(nameConstant, descriptorConstant);
-}
-
-ConstantNameAndType* Class::getOrCreateNameAndTypeConstant(ConstantUtf8Info* nameConstant,
-                                                           const std::string& descriptor)
-{
-    assert(this == nameConstant->getOwner());
-
-    ConstantUtf8Info* descriptorConstant = getOrCreateUtf8Constant(descriptor);
     return getOrCreateNameAndTypeConstant(nameConstant, descriptorConstant);
 }
 
@@ -406,34 +430,41 @@ ConstantUtf8Info* Class::getOrCreateUtf8Constant(const std::string& value)
     return utf8Constant;
 }
 
-Method* Class::getOrCreateMethod(const std::string& name, const std::string& descriptor)
+Method* Class::getOrCreateMethod(const std::string& name, const DescriptorMethod& descriptor)
 {
     auto* nameConstant = getOrCreateUtf8Constant(name);
-    auto* descriptorConstant = getOrCreateUtf8Constant(descriptor);
+    auto* descriptorConstant = getOrCreateUtf8Constant(descriptor.toString());
     return getOrCreateMethod(nameConstant, descriptorConstant);
 }
 
-Method* Class::getOrCreateMethod(const std::string& name, const DescriptorMethod& descriptor)
+Method* Class::getOrCreateMethod(const std::string& name, ConstantUtf8Info* descriptorConstant)
 {
-    return getOrCreateMethod(name, descriptor.toString());
+    auto* nameConstant = getOrCreateUtf8Constant(name);
+    return getOrCreateMethod(nameConstant, descriptorConstant);
 }
 
-Method* Class::getOrCreateMethod(ConstantUtf8Info* name, ConstantUtf8Info* descriptor)
+Method* Class::getOrCreateMethod(ConstantUtf8Info* nameConstant, const DescriptorMethod& descriptor)
 {
-    assert(this == name->getOwner());
-    assert(this == descriptor->getOwner());
+    auto* descriptorConstant = getOrCreateUtf8Constant(descriptor.toString());
+    return getOrCreateMethod(nameConstant, descriptorConstant);
+}
+
+Method* Class::getOrCreateMethod(ConstantUtf8Info* nameConstant, ConstantUtf8Info* descriptorConstant)
+{
+    assert(this == nameConstant->getOwner());
+    assert(this == descriptorConstant->getOwner());
 
     // search method
     for (auto* method : methods_)
     {
-        if (method->getName() == name && method->getDescriptor() == descriptor)
+        if (method->getName() == nameConstant && method->getDescriptor() == descriptorConstant)
         {
             return method;
         }
     }
 
     // create new
-    auto* method = new Method(name, descriptor);
+    auto* method = new Method(nameConstant, descriptorConstant);
     methods_.insert(method);
     return method;
 }

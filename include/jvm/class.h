@@ -28,6 +28,8 @@ namespace jvm
     class Method;
     class Attribute;
     class Descriptor;
+    class DescriptorField;
+    class DescriptorMethod;
 
     enum MajorVersion:uint16_t
     {
@@ -91,18 +93,6 @@ namespace jvm
         ConstantClass* getOrCreateClassConstant(ConstantUtf8Info* name);
         //endregion
         //region GET OR CREATE FIELDREF CONSTANT
-        /**
-         * @brief Returns an existing @ref ConstantFieldref "Fieldref constant" from this class's constant pool,
-         *        or creates and returns a new one.
-         * @note May create @ref ConstantClass and @ref ConstantNameAndType entries as needed.
-         * @param className Class internal name (e.g. "java/lang/System").
-         * @param fieldName Field name.
-         * @param fieldDescriptor Field descriptor (e.g. "I", "Ljava/lang/String;", "[I").
-         * @return Fieldref constant.
-         */
-        ConstantFieldref* getOrCreateFieldrefConstant(const std::string& className,
-                                                      const std::string& fieldName,
-                                                      const std::string& fieldDescriptor);
 
         /**
          * @brief Returns an existing @ref ConstantFieldref "Fieldref constant" from this class's constant pool,
@@ -114,7 +104,43 @@ namespace jvm
          * @return Fieldref constant.
          */
         ConstantFieldref* getOrCreateFieldrefConstant(const std::string& className, const std::string& fieldName,
-                                                      const Descriptor& fieldDescriptor);
+                                                      const DescriptorField& fieldDescriptor);
+
+        /**
+         * @brief Returns an existing @ref ConstantFieldref "Fieldref constant" from this class's constant pool,
+         *        or creates and returns a new one.
+         * @note May create @ref ConstantClass and @ref ConstantNameAndType entries as needed.
+         * @param classConstant Class constant.
+         * @param fieldName Field name.
+         * @param fieldDescriptor Descriptor object representing a field descriptor.
+         * @return Fieldref constant.
+         */
+        ConstantFieldref* getOrCreateFieldrefConstant(ConstantClass* classConstant, const std::string& fieldName,
+                                                      const DescriptorField& fieldDescriptor);
+
+        /**
+         * @brief Returns an existing @ref ConstantFieldref "Fieldref constant" from this class's constant pool,
+         *        or creates and returns a new one.
+         * @note May create @ref ConstantClass and @ref ConstantNameAndType entries as needed.
+         * @param classConstant Class constant.
+         * @param fieldNameConstant Field constant.
+         * @param fieldDescriptor Descriptor object representing a field descriptor.
+         * @return Fieldref constant.
+         */
+        ConstantFieldref* getOrCreateFieldrefConstant(ConstantClass* classConstant, ConstantUtf8Info* fieldNameConstant,
+                                                      const DescriptorField& fieldDescriptor);
+
+        /**
+         * @brief Returns an existing @ref ConstantFieldref "Fieldref constant" from this class's constant pool,
+         *        or creates and returns a new one.
+         * @note May create @ref ConstantClass and @ref ConstantNameAndType entries as needed.
+         * @param classConstant Class constant.
+         * @param fieldNameConstant Field constant.
+         * @param fieldDescriptorConstant Descriptor constant.
+         * @return Fieldref constant.
+         */
+        ConstantFieldref* getOrCreateFieldrefConstant(ConstantClass* classConstant, ConstantUtf8Info* fieldNameConstant,
+                                                      ConstantUtf8Info* fieldDescriptorConstant);
 
         /**
          * @brief Returns an existing @ref ConstantFieldref "Fieldref constant" from this class's constant pool,
@@ -128,18 +154,6 @@ namespace jvm
                                                       ConstantNameAndType* nameAndTypeConstant);
         //endregion
         //region GET OR CREATE METHODREF CONSTANT
-        /**
-         * @brief Returns an existing @ref ConstantMethodref "Methodref constant" from this class's constant pool,
-         *        or creates and returns a new one.
-         * @note May create @ref ConstantClass and @ref ConstantNameAndType entries as needed.
-         * @param className Class internal name (e.g. "java/lang/String").
-         * @param methodName Method name (e.g. "hashCode", "&lt;init&gt;", "&lt;clinit&gt;").
-         * @param methodDescriptor Method descriptor (e.g. "()I", "(I)Ljava/lang/String;").
-         * @return Methodref constant.
-         */
-        ConstantMethodref* getOrCreateMethodrefConstant(const std::string& className,
-                                                        const std::string& methodName,
-                                                        const std::string& methodDescriptor);
 
         /**
          * @brief Returns an existing @ref ConstantMethodref "Methodref constant" from this class's constant pool,
@@ -151,7 +165,46 @@ namespace jvm
          * @return Methodref constant.
          */
         ConstantMethodref* getOrCreateMethodrefConstant(const std::string& className, const std::string& methodName,
-                                                        const Descriptor& methodDescriptor);
+                                                        const DescriptorMethod& methodDescriptor);
+
+        /**
+         * @brief Returns an existing @ref ConstantMethodref "Methodref constant" from this class's constant pool,
+         *        or creates and returns a new one.
+         * @note May create @ref ConstantClass and @ref ConstantNameAndType entries as needed.
+         * @param classConstant Class constant.
+         * @param methodName Method name (e.g. "hashCode", "&lt;init&gt;", "&lt;clinit&gt;").
+         * @param methodDescriptor Descriptor object representing a method descriptor.
+         * @return Methodref constant.
+         */
+        ConstantMethodref* getOrCreateMethodrefConstant(ConstantClass* classConstant,
+                                                        const std::string& methodName,
+                                                        const DescriptorMethod& methodDescriptor);
+
+        /**
+         * @brief Returns an existing @ref ConstantMethodref "Methodref constant" from this class's constant pool,
+         *        or creates and returns a new one.
+         * @note May create @ref ConstantClass and @ref ConstantNameAndType entries as needed.
+         * @param classConstant Class constant.
+         * @param methodNameConstant Method constant.
+         * @param methodDescriptor Descriptor object representing a method descriptor.
+         * @return Methodref constant.
+         */
+        ConstantMethodref* getOrCreateMethodrefConstant(ConstantClass* classConstant,
+                                                        ConstantUtf8Info* methodNameConstant,
+                                                        const DescriptorMethod& methodDescriptor);
+
+        /**
+         * @brief Returns an existing @ref ConstantMethodref "Methodref constant" from this class's constant pool,
+         *        or creates and returns a new one.
+         * @note May create @ref ConstantClass and @ref ConstantNameAndType entries as needed.
+         * @param classConstant Class constant.
+         * @param methodNameConstant Method constant.
+         * @param methodDescriptorConstant Descriptor constant.
+         * @return Methodref constant.
+         */
+        ConstantMethodref* getOrCreateMethodrefConstant(ConstantClass* classConstant,
+                                                        ConstantUtf8Info* methodNameConstant,
+                                                        ConstantUtf8Info* methodDescriptorConstant);
 
         /**
          * @brief Returns an existing @ref ConstantMethodref "Methodref constant" from this class's constant pool,
@@ -165,18 +218,7 @@ namespace jvm
                                                         ConstantNameAndType* nameAndTypeConstant);
         //endregion
         //region GET OR CREATE INTERFACE METHODREF CONSTANT
-        /**
-         * @brief Returns an existing @ref ConstantInterfaceMethodref "InterfaceMethodref constant" from this class's constant pool,
-         *        or creates and returns a new one.
-         * @note May create @ref ConstantClass and @ref ConstantNameAndType entries as needed.
-         * @param className Interface internal name (e.g. "java/lang/Runnable").
-         * @param methodName Interface method name.
-         * @param methodDescriptor Method descriptor (e.g. "()V").
-         * @return Interface methodref constant.
-         */
-        ConstantInterfaceMethodref* getOrCreateInterfaceMethodrefConstant(const std::string& className,
-                                                                          const std::string& methodName,
-                                                                          const std::string& methodDescriptor);
+
 
         /**
          * @brief Returns an existing @ref ConstantInterfaceMethodref "InterfaceMethodref constant" from this class's constant pool,
@@ -188,7 +230,46 @@ namespace jvm
          * @return Interface methodref constant.
          */
         ConstantInterfaceMethodref* getOrCreateInterfaceMethodrefConstant(
-            const std::string& className, const std::string& methodName, const Descriptor& methodDescriptor);
+            const std::string& className, const std::string& methodName, const DescriptorMethod& methodDescriptor);
+
+        /**
+         * @brief Returns an existing @ref ConstantInterfaceMethodref "InterfaceMethodref constant" from this class's constant pool,
+         *        or creates and returns a new one.
+         * @note May create @ref ConstantClass and @ref ConstantNameAndType entries as needed.
+         * @param classConstant Class constant.
+         * @param methodName Interface method name.
+         * @param methodDescriptor Descriptor object representing a method descriptor.
+         * @return Interface methodref constant.
+         */
+        ConstantInterfaceMethodref* getOrCreateInterfaceMethodrefConstant(
+            ConstantClass* classConstant, const std::string& methodName, const DescriptorMethod& methodDescriptor);
+
+        /**
+         * @brief Returns an existing @ref ConstantInterfaceMethodref "InterfaceMethodref constant" from this class's constant pool,
+         *        or creates and returns a new one.
+         * @note May create @ref ConstantClass and @ref ConstantNameAndType entries as needed.
+         * @param classConstant Interface class constant.
+         * @param methodNameConstant Interface method name constant.
+         * @param methodDescriptor Descriptor object representing a method descriptor.
+         * @return Interface methodref constant.
+         */
+        ConstantInterfaceMethodref* getOrCreateInterfaceMethodrefConstant(
+            ConstantClass* classConstant, ConstantUtf8Info* methodNameConstant,
+            const DescriptorMethod& methodDescriptor);
+
+        /**
+         * @brief Returns an existing @ref ConstantInterfaceMethodref "InterfaceMethodref constant" from this class's constant pool,
+         *        or creates and returns a new one.
+         * @note May create @ref ConstantClass and @ref ConstantNameAndType entries as needed.
+         * @param classConstant Interface class constant.
+         * @param methodNameConstant Interface method name constant.
+         * @param methodDescriptorConstant Descriptor constant.
+         * @return Interface methodref constant.
+         */
+        ConstantInterfaceMethodref* getOrCreateInterfaceMethodrefConstant(
+            ConstantClass* classConstant, ConstantUtf8Info* methodNameConstant,
+            ConstantUtf8Info* methodDescriptorConstant);
+
 
         /**
          * @brief Returns an existing @ref ConstantInterfaceMethodref "InterfaceMethodref constant" from this class's constant pool,
@@ -258,15 +339,6 @@ namespace jvm
         ConstantDouble* getOrCreateDoubleConstant(double value);
         //endregion
         //region GET OR CREATE NAME AND TYPE CONSTANT
-        /**
-         * @brief Returns an existing @ref ConstantNameAndType "Name-and-type constant" from this class's constant pool,
-         *        or creates and returns a new one.
-         * @note May create new @ref ConstantUtf8Info entries for the name and descriptor.
-         * @param name Name.
-         * @param descriptor Descriptor (field descriptor like "I", or method descriptor like "(I)V").
-         * @return Name-and-type constant.
-         */
-        ConstantNameAndType* getOrCreateNameAndTypeConstant(const std::string& name, const std::string& descriptor);
 
         /**
          * @brief Returns an existing @ref ConstantNameAndType "Name-and-type constant" from this class's constant pool,
@@ -303,19 +375,6 @@ namespace jvm
         ConstantNameAndType* getOrCreateNameAndTypeConstant(ConstantUtf8Info* nameConstant,
                                                             const Descriptor& descriptor);
 
-
-        /**
-         * @brief Returns an existing @ref ConstantNameAndType "Name-and-type constant" from this class's constant pool,
-         *        or creates and returns a new one.
-         * @note May create a new @ref ConstantUtf8Info entry for the descriptor.
-         * @note The provided constant must have this @c Class instance as its owner.
-         * @param nameConstant UTF-8 constant containing the name.
-         * @param descriptor Descriptor (field descriptor like "I", or method descriptor like "(I)V").
-         * @return Name-and-type constant.
-         */
-        ConstantNameAndType* getOrCreateNameAndTypeConstant(ConstantUtf8Info* nameConstant,
-                                                            const std::string& descriptor);
-
         /**
          * @brief Returns an existing @ref ConstantNameAndType "Name-and-type constant" from this class's constant pool,
          *        or creates and returns a new one.
@@ -337,17 +396,6 @@ namespace jvm
         ConstantUtf8Info* getOrCreateUtf8Constant(const std::string& value);
         //endregion
         //region GET OR CREATE METHOD
-        /**
-         * @brief Returns an existing @ref Method "method" with the specified name and descriptor,
-         *        or creates and returns a new one.
-         *
-         * The method is identified by its name and descriptor within this class.
-         *
-         * @param name Method name (e.g. "run", "main", "&lt;init&gt;", "&lt;clinit&gt;").
-         * @param descriptor Method descriptor (e.g. "()V", "([Ljava/lang/String;)V", "(I)Ljava/lang/String;").
-         * @return Method instance owned by this class.
-         */
-        Method* getOrCreateMethod(const std::string& name, const std::string& descriptor);
 
         /**
         * @brief Returns an existing @ref Method "method" with the specified name and descriptor,
@@ -362,17 +410,41 @@ namespace jvm
         Method* getOrCreateMethod(const std::string& name, const DescriptorMethod& descriptor);
 
         /**
+        * @brief Returns an existing @ref Method "method" with the specified name and descriptor,
+         *        or creates and returns a new one.
+         *
+         * The method is identified by its name and descriptor within this class.
+         *
+         * @param name Method name (e.g. "run", "main", "&lt;init&gt;", "&lt;clinit&gt;").
+         * @param descriptorConstant UTF-8 constant containing the method descriptor.
+         * @return Method instance owned by this class.
+         */
+        Method* getOrCreateMethod(const std::string& name, ConstantUtf8Info* descriptorConstant);
+
+        /**
+        * @brief Returns an existing @ref Method "method" with the specified name and descriptor,
+         *        or creates and returns a new one.
+         *
+         * The method is identified by its name and descriptor within this class.
+         *
+         * @param nameConstant UTF-8 constant containing the method name.
+         * @param descriptor Descriptor object representing a method descriptor.
+         * @return Method instance owned by this class.
+         */
+        Method* getOrCreateMethod(ConstantUtf8Info* nameConstant, const DescriptorMethod& descriptor);
+
+        /**
          * @brief Returns an existing @ref Method "method" with the specified name and descriptor,
          *        or creates and returns a new one.
          *
          * The method is identified by its name and descriptor within this class.
          *
          * @note The provided constants must have this @c Class instance as their owner.
-         * @param name UTF-8 constant containing the method name.
-         * @param descriptor UTF-8 constant containing the method descriptor.
+         * @param nameConstant UTF-8 constant containing the method name.
+         * @param descriptorConstant UTF-8 constant containing the method descriptor.
          * @return Method instance owned by this class.
          */
-        Method* getOrCreateMethod(ConstantUtf8Info* name, ConstantUtf8Info* descriptor);
+        Method* getOrCreateMethod(ConstantUtf8Info* nameConstant, ConstantUtf8Info* descriptorConstant);
         //endregion
 
         std::span<Constant*> constants();
