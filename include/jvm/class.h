@@ -7,10 +7,11 @@
 #include <string>
 #include <vector>
 
-#include "class-file-element.h"
+#include "serializable.h"
 
 namespace jvm
 {
+    class DescriptorMethod;
     class ConstantDouble;
     class ConstantLong;
     class ConstantFloat;
@@ -49,7 +50,7 @@ namespace jvm
         MAJOR_VERSION_16 = 60,
     };
 
-    class Class : ClassFileElement<void>
+    class Class : Serializable
     {
         static uint16_t minorVersion;
         static MajorVersion majorVersion;
@@ -68,7 +69,7 @@ namespace jvm
             ACC_MODULE = 0x8000, // Is a module, not a class or interface.
         };
 
-        Class(std::string name);
+        Class(const std::string& className, const std::string& parentName);
 
         //region GET OR CREATE CLASS CONSTANT
         /**
@@ -347,6 +348,18 @@ namespace jvm
          * @return Method instance owned by this class.
          */
         Method* getOrCreateMethod(const std::string& name, const std::string& descriptor);
+
+        /**
+        * @brief Returns an existing @ref Method "method" with the specified name and descriptor,
+         *        or creates and returns a new one.
+         *
+         * The method is identified by its name and descriptor within this class.
+         *
+         * @param name Method name (e.g. "run", "main", "&lt;init&gt;", "&lt;clinit&gt;").
+         * @param descriptor Descriptor object representing a method descriptor.
+         * @return Method instance owned by this class.
+         */
+        Method* getOrCreateMethod(const std::string& name, const DescriptorMethod& descriptor);
 
         /**
          * @brief Returns an existing @ref Method "method" with the specified name and descriptor,

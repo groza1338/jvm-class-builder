@@ -17,6 +17,7 @@
 #include "jvm/constant-name-and-type.h"
 #include "jvm/constant-string.h"
 #include "jvm/constant-utf-8-info.h"
+#include "jvm/descriptor-method.h"
 #include "jvm/descriptor.h"
 #include "jvm/field.h"
 #include "jvm/method.h"
@@ -26,6 +27,13 @@
 using namespace jvm;
 
 MajorVersion Class::majorVersion = MAJOR_VERSION_16;
+
+Class::Class(const std::string& className, const std::string& parentName)
+{
+    thisClassConstant_ = getOrCreateClassConstant(className);
+    superClassConstant_ = getOrCreateClassConstant(parentName);
+}
+
 uint16_t Class::minorVersion = 0x0000;
 
 ConstantClass* Class::getOrCreateClassConstant(const std::string& name)
@@ -405,6 +413,11 @@ Method* Class::getOrCreateMethod(const std::string& name, const std::string& des
     return getOrCreateMethod(nameConstant, descriptorConstant);
 }
 
+Method* Class::getOrCreateMethod(const std::string& name, const DescriptorMethod& descriptor)
+{
+    return getOrCreateMethod(name, descriptor.toString());
+}
+
 Method* Class::getOrCreateMethod(ConstantUtf8Info* name, ConstantUtf8Info* descriptor)
 {
     assert(this == name->getOwner());
@@ -496,7 +509,7 @@ void Class::writeTo(std::ostream& os) const
     // method_info    methods[methods_count];
     for (const auto& method : methods_)
     {
-        os << method;
+        os << *method;
     }
 
     // u2             attributes_count;
