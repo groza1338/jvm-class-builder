@@ -2,7 +2,9 @@
 
 #include <cassert>
 #include <cstring>
+#include <jni.h>
 #include <ostream>
+#include <sstream>
 #include <utility>
 
 #include "jvm/constant.h"
@@ -22,6 +24,7 @@
 #include "jvm/field.h"
 #include "jvm/method.h"
 #include "jvm/internal/utils.h"
+#include "java-internal-paths.h"
 
 
 using namespace jvm;
@@ -493,24 +496,26 @@ void Class::removeFlag(AccessFlag flag)
 
 void Class::writeTo(std::ostream& os) const
 {
+    std::ostringstream buffer;
+
     // u4             magic;
     static uint32_t magicNumber = 0xCAFEBABE;
-    internal::Utils::writeBigEndian(os, magicNumber);
+    internal::Utils::writeBigEndian(buffer, magicNumber);
 
     // u2             minor_version;
-    internal::Utils::writeBigEndian(os, minorVersion);
+    internal::Utils::writeBigEndian(buffer, minorVersion);
 
     // u2             major_version;
-    internal::Utils::writeBigEndian(os, static_cast<uint16_t>(majorVersion));
+    internal::Utils::writeBigEndian(buffer, static_cast<uint16_t>(majorVersion));
 
     // u2             constant_pool_count;
     uint16_t constantCount = static_cast<uint16_t>(nextCpIndex);
-    internal::Utils::writeBigEndian(os, constantCount);
+    internal::Utils::writeBigEndian(buffer, constantCount);
 
     // cp_info        constant_pool[constant_pool_count-1];
     for (const auto& constant : constants_)
     {
-        os << *constant;
+        buffer << *constant;
     }
 
     // u2             access_flags;
@@ -519,56 +524,60 @@ void Class::writeTo(std::ostream& os) const
     {
         accessFlags = accessFlags | flag;
     }
-    internal::Utils::writeBigEndian(os, accessFlags);
+    internal::Utils::writeBigEndian(buffer, accessFlags);
 
     // u2             this_class;
     uint16_t thisClass = thisClassConstant_->getIndex();
-    internal::Utils::writeBigEndian(os, thisClass);
+    internal::Utils::writeBigEndian(buffer, thisClass);
 
     // u2             super_class;
     uint16_t superClass = superClassConstant_->getIndex();
-    internal::Utils::writeBigEndian(os, superClass);
+    internal::Utils::writeBigEndian(buffer, superClass);
 
     // u2             interfaces_count;
     uint16_t interfacesCount = static_cast<uint16_t>(interfacesConstant_.size());
-    internal::Utils::writeBigEndian(os, interfacesCount);
+    internal::Utils::writeBigEndian(buffer, interfacesCount);
 
     // u2             interfaces[interfaces_count];
     for (const auto& interface : interfacesConstant_)
     {
         uint16_t interfaceIndex = interface->getIndex();
-        internal::Utils::writeBigEndian(os, interfaceIndex);
+        internal::Utils::writeBigEndian(buffer, interfaceIndex);
     }
 
     // u2             fields_count;
     uint16_t fieldsCount = static_cast<uint16_t>(fields_.size());
-    internal::Utils::writeBigEndian(os, fieldsCount);
+    internal::Utils::writeBigEndian(buffer, fieldsCount);
 
     // field_info     fields[fields_count];
     for (const auto& field : fields_)
     {
-        os << *field;
+        buffer << *field;
     }
 
     // u2             methods_count;
     uint16_t methodsCount = static_cast<uint16_t>(methods_.size());
-    internal::Utils::writeBigEndian(os, methodsCount);
+    internal::Utils::writeBigEndian(buffer, methodsCount);
 
     // method_info    methods[methods_count];
     for (const auto& method : methods_)
     {
-        os << *method;
+        buffer << *method;
     }
 
     // u2             attributes_count;
     uint16_t attributesCount = static_cast<uint16_t>(attributes_.size());
-    internal::Utils::writeBigEndian(os, attributesCount);
+    internal::Utils::writeBigEndian(buffer, attributesCount);
 
     // attribute_info attributes[attributes_count];
     for (const auto& attribute : attributes_)
     {
-        os << *attribute;
+        buffer << *attribute;
     }
+
+    // fix data and write to stream
+    auto str = buffer.str();
+    fixClassBinary(os, std::vector<unsigned char>{str.begin(), str.end()});
 }
 
 std::size_t Class::getByteSize() const
@@ -709,4 +718,84 @@ void Class::validateFlags(uint16_t flags)
             throw std::logic_error("Module class cannot have class-related flags");
         }
     }
+}
+
+void Class::fixClassBinary(std::ostream& os, const std::span<const unsigned char>& data)
+{
+    JavaVM* jvm = nullptr;
+    JNIEnv* env = nullptr;
+
+    std::string classpath = std::string("-Djava.class.path=") + JAVA_INTERNAL_JAR;
+    JavaVMOption options[1];
+    options[0].optionString = classpath.data();
+    JavaVMInitArgs vm_args{};
+    vm_args.version = JNI_VERSION_1_8;
+    vm_args.nOptions = 1;
+    vm_args.options = options;
+    vm_args.ignoreUnrecognized = JNI_FALSE;
+
+    // run jvm
+    jint correctJvmCreation = JNI_CreateJavaVM(&jvm, reinterpret_cast<void**>(&env), &vm_args);
+    if (correctJvmCreation != JNI_OK || !env)
+    {
+        throw std::runtime_error("Failed to create JVM");
+    }
+
+    try
+    {
+        // find class
+        jclass fixClass = env->FindClass("compilator/fix/FixClass");
+        if (!fixClass)
+        {
+            throw std::logic_error("FixClass not found");
+        }
+
+        // find static method
+        jmethodID fixMethod = env->GetStaticMethodID(fixClass, "fix", "([B)[B");
+        if (!fixMethod)
+        {
+            throw std::logic_error("FixClass.fix(byte[]) not found");
+        }
+
+        // convert c++ byte array to jvm byte array
+        jbyteArray inputArray = env->NewByteArray(static_cast<jsize>(data.size()));
+        env->SetByteArrayRegion(
+            inputArray, 0,
+            static_cast<jsize>(data.size()),
+            reinterpret_cast<const jbyte*>(data.data()));
+
+        // call fix method (method provide jByteArray)
+        auto resultArray = static_cast<jbyteArray>(env->CallStaticObjectMethod(fixClass, fixMethod, inputArray));
+
+        if (env->ExceptionCheck())
+        {
+            env->ExceptionDescribe();
+            env->ExceptionClear();
+            throw std::runtime_error("Java exception in FixClass.fix()");
+        }
+
+        // convert jvm byte array to c++ byte array
+        jsize resultSize = env->GetArrayLength(resultArray);
+        std::vector<unsigned char> result(resultSize);
+        env->GetByteArrayRegion(
+            resultArray, 0, resultSize,
+            reinterpret_cast<jbyte*>(result.data()));
+
+        // write data to stream
+        os.write(reinterpret_cast<const char*>(result.data()), static_cast<std::streamsize>(result.size()));
+
+        // clear refs
+        env->DeleteLocalRef(inputArray);
+        env->DeleteLocalRef(resultArray);
+        env->DeleteLocalRef(fixClass);
+    }
+    catch (...)
+    {
+        // destroy jvm
+        jvm->DestroyJavaVM();
+        throw;
+    }
+
+    // destroy jvm
+    jvm->DestroyJavaVM();
 }

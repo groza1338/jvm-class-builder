@@ -40,6 +40,27 @@ add_custom_target(java-internal ALL
         DEPENDS ${JAVA_INTERNAL_JAR}
 )
 
+
+set(JAVA_HOME $ENV{JAVA_HOME})
+
+if (NOT JAVA_HOME)
+    message(FATAL_ERROR "Can't find JAVA_HOME env variable. Please set it.")
+endif ()
+
+message(STATUS "Using JAVA_HOME: ${JAVA_HOME}")
+
+# Set paths for include and libraries based on JAVA_HOME
+set(JAVA_INCLUDE_PATH ${JAVA_HOME}/include)
+set(JAVA_INCLUDE_PATH2 ${JAVA_HOME}/include/linux)
+
+# Check if the Java library exists in the expected location
+set(JAVA_LIBRARIES ${JAVA_HOME}/lib/server/libjvm.so)
+
+# Check if libjvm.so exists and is accessible
+if (NOT EXISTS ${JAVA_LIBRARIES})
+    message(FATAL_ERROR "Can't find libjvm.so in ${JAVA_LIBRARIES}. Please ensure the JDK is correctly installed.")
+endif ()
+
 # generate paths for internal java project
 configure_file(
         cmake/java-internal-paths.h.in.h
@@ -90,12 +111,19 @@ target_include_directories(jvm-class-builder
         PRIVATE
         ${CMAKE_CURRENT_SOURCE_DIR}/src/internal
         ${CMAKE_BINARY_DIR}/generated
+        ${JAVA_INCLUDE_PATH}
+        ${JAVA_INCLUDE_PATH2}
 )
 
 add_library(jvm::ClassBuilder ALIAS jvm-class-builder)
 
 # add dependence to main project
 add_dependencies(jvm-class-builder java-internal)
+
+target_link_libraries(jvm-class-builder
+        PRIVATE
+        ${JAVA_LIBRARIES}
+)
 
 include(GNUInstallDirs)
 include(CMakePackageConfigHelpers)

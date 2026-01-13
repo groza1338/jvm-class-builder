@@ -503,6 +503,14 @@ namespace jvm
          */
         static void validateFlags(uint16_t flags);
 
+        /**
+         * Fix class (code attributes) using java project.
+         * @note Run JVM in this method.
+         * @param os Output stream.
+         * @param data @c Class in binary format.
+         */
+        static void fixClassBinary(std::ostream& os, const std::span<const unsigned char>& data);
+
         std::vector<Constant*> constants_{};
         uint16_t nextCpIndex = 1; // 0 index is not available for writing
         std::set<AccessFlag> accessFlags_{};
