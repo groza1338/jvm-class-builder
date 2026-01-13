@@ -12,7 +12,7 @@ option(BUILD_EXAMPLES "Build examples" OFF)
 find_program(MAVEN_EXECUTABLE mvn REQUIRED)
 
 set(JAVA_INTERNAL_PROJECT_DIR
-        ${CMAKE_SOURCE_DIR}/java-internal
+        ${CMAKE_CURRENT_SOURCE_DIR}/java-internal
 )
 set(JAVA_INTERNAL_BUILD_DIR
         ${CMAKE_BINARY_DIR}/java
