@@ -87,7 +87,7 @@ Instruction* AttributeCode::PushInt(int32_t value)
             }
             if (INT32_MIN <= value && value <= INT32_MAX)
             {
-                auto* integerConstant = getOwner()->getClassOwner()->getOrCreateIntegerConstant(value);
+                auto* integerConstant = getOwner()->getOwner()->getOrCreateIntegerConstant(value);
                 return new InstructionLdc(this, integerConstant);
             }
             throw std::runtime_error("Unsupported integer value.");
@@ -104,7 +104,7 @@ Instruction* AttributeCode::PushLong(int64_t value)
     case 1:
         return new Instruction(this, Instruction::INSTRUCTION_lconst_1);
     default:
-        auto* longConstant = getOwner()->getClassOwner()->getOrCreateLongConstant(value);
+        auto* longConstant = getOwner()->getOwner()->getOrCreateLongConstant(value);
         return new InstructionLdc(this, longConstant);
     }
 }
@@ -123,7 +123,7 @@ Instruction* AttributeCode::PushFloat(float value)
     {
         return new Instruction(this, Instruction::INSTRUCTION_fconst_2);
     }
-    auto* floatConstant = getOwner()->getClassOwner()->getOrCreateFloatConstant(value);
+    auto* floatConstant = getOwner()->getOwner()->getOrCreateFloatConstant(value);
     return new InstructionLdc(this, floatConstant);
 }
 
@@ -137,7 +137,7 @@ Instruction* AttributeCode::PushDouble(double value)
     {
         return new Instruction(this, Instruction::INSTRUCTION_dconst_1);
     }
-    auto* doubleConstant = getOwner()->getClassOwner()->getOrCreateDoubleConstant(value);
+    auto* doubleConstant = getOwner()->getOwner()->getOrCreateDoubleConstant(value);
     return new InstructionLdc(this, doubleConstant);
 }
 
@@ -1240,7 +1240,7 @@ size_t AttributeCode::getContentSizeInBytes() const
 }
 
 AttributeCode::AttributeCode(Method* methodOwner) :
-    Attribute(methodOwner->getClassOwner()->getOrCreateUtf8Constant("Code")),
+    Attribute(methodOwner->getOwner()->getOrCreateUtf8Constant("Code")),
     ClassFileElement(methodOwner)
 {
 }
