@@ -1,11 +1,15 @@
 #include "jvm/class.h"
 
+#include <algorithm>
 #include <cassert>
 #include <cstring>
 #include <jni.h>
 #include <ostream>
 #include <sstream>
 #include <utility>
+#include <fstream>
+#include <filesystem>
+#include <iostream>
 
 #include "jvm/constant.h"
 #include "jvm/constant-class.h"
@@ -26,7 +30,7 @@
 #include "jvm/internal/utils.h"
 #include "java-internal-paths.h"
 
-
+namespace fs = std::filesystem;
 using namespace jvm;
 
 MajorVersion Class::majorVersion = MAJOR_VERSION_16;
@@ -70,7 +74,7 @@ ConstantClass* Class::getOrCreateClassConstant(ConstantUtf8Info* name)
 }
 
 ConstantFieldref* Class::getOrCreateFieldrefConstant(const std::string& className, const std::string& fieldName,
-    const DescriptorField& fieldDescriptor)
+                                                     const DescriptorField& fieldDescriptor)
 {
     ConstantClass* classConstant = getOrCreateClassConstant(className);
     ConstantNameAndType* nameAndTypeConstant = getOrCreateNameAndTypeConstant(fieldName, fieldDescriptor);
@@ -78,23 +82,24 @@ ConstantFieldref* Class::getOrCreateFieldrefConstant(const std::string& classNam
 }
 
 ConstantFieldref* Class::getOrCreateFieldrefConstant(ConstantClass* classConstant, const std::string& fieldName,
-    const DescriptorField& fieldDescriptor)
+                                                     const DescriptorField& fieldDescriptor)
 {
     ConstantNameAndType* nameAndTypeConstant = getOrCreateNameAndTypeConstant(fieldName, fieldDescriptor);
     return getOrCreateFieldrefConstant(classConstant, nameAndTypeConstant);
 }
 
 ConstantFieldref* Class::getOrCreateFieldrefConstant(ConstantClass* classConstant, ConstantUtf8Info* fieldNameConstant,
-    const DescriptorField& fieldDescriptor)
+                                                     const DescriptorField& fieldDescriptor)
 {
     ConstantNameAndType* nameAndTypeConstant = getOrCreateNameAndTypeConstant(fieldNameConstant, fieldDescriptor);
     return getOrCreateFieldrefConstant(classConstant, nameAndTypeConstant);
 }
 
 ConstantFieldref* Class::getOrCreateFieldrefConstant(ConstantClass* classConstant, ConstantUtf8Info* fieldNameConstant,
-    ConstantUtf8Info* fieldDescriptorConstant)
+                                                     ConstantUtf8Info* fieldDescriptorConstant)
 {
-    ConstantNameAndType* nameAndTypeConstant = getOrCreateNameAndTypeConstant(fieldNameConstant, fieldDescriptorConstant);
+    ConstantNameAndType* nameAndTypeConstant = getOrCreateNameAndTypeConstant(
+        fieldNameConstant, fieldDescriptorConstant);
     return getOrCreateFieldrefConstant(classConstant, nameAndTypeConstant);
 }
 
@@ -127,7 +132,7 @@ ConstantFieldref* Class::getOrCreateFieldrefConstant(ConstantClass* classConstan
 
 
 ConstantMethodref* Class::getOrCreateMethodrefConstant(const std::string& className, const std::string& methodName,
-    const DescriptorMethod& methodDescriptor)
+                                                       const DescriptorMethod& methodDescriptor)
 {
     ConstantClass* classConstant = getOrCreateClassConstant(className);
     ConstantNameAndType* nameAndTypeConstant = getOrCreateNameAndTypeConstant(methodName, methodDescriptor);
@@ -135,23 +140,26 @@ ConstantMethodref* Class::getOrCreateMethodrefConstant(const std::string& classN
 }
 
 ConstantMethodref* Class::getOrCreateMethodrefConstant(ConstantClass* classConstant, const std::string& methodName,
-    const DescriptorMethod& methodDescriptor)
+                                                       const DescriptorMethod& methodDescriptor)
 {
     ConstantNameAndType* nameAndTypeConstant = getOrCreateNameAndTypeConstant(methodName, methodDescriptor);
     return getOrCreateMethodrefConstant(classConstant, nameAndTypeConstant);
 }
 
-ConstantMethodref* Class::getOrCreateMethodrefConstant(ConstantClass* classConstant, ConstantUtf8Info* methodNameConstant,
-    const DescriptorMethod& methodDescriptor)
+ConstantMethodref* Class::getOrCreateMethodrefConstant(ConstantClass* classConstant,
+                                                       ConstantUtf8Info* methodNameConstant,
+                                                       const DescriptorMethod& methodDescriptor)
 {
     ConstantNameAndType* nameAndTypeConstant = getOrCreateNameAndTypeConstant(methodNameConstant, methodDescriptor);
     return getOrCreateMethodrefConstant(classConstant, nameAndTypeConstant);
 }
 
-ConstantMethodref* Class::getOrCreateMethodrefConstant(ConstantClass* classConstant, ConstantUtf8Info* methodNameConstant,
-    ConstantUtf8Info* methodDescriptorConstant)
+ConstantMethodref* Class::getOrCreateMethodrefConstant(ConstantClass* classConstant,
+                                                       ConstantUtf8Info* methodNameConstant,
+                                                       ConstantUtf8Info* methodDescriptorConstant)
 {
-    ConstantNameAndType* nameAndTypeConstant = getOrCreateNameAndTypeConstant(methodNameConstant, methodDescriptorConstant);
+    ConstantNameAndType* nameAndTypeConstant = getOrCreateNameAndTypeConstant(
+        methodNameConstant, methodDescriptorConstant);
     return getOrCreateMethodrefConstant(classConstant, nameAndTypeConstant);
 }
 
@@ -184,7 +192,8 @@ ConstantMethodref* Class::getOrCreateMethodrefConstant(ConstantClass* classConst
 }
 
 ConstantInterfaceMethodref* Class::getOrCreateInterfaceMethodrefConstant(const std::string& className,
-    const std::string& methodName, const DescriptorMethod& methodDescriptor)
+                                                                         const std::string& methodName,
+                                                                         const DescriptorMethod& methodDescriptor)
 {
     ConstantClass* classConstant = getOrCreateClassConstant(className);
     ConstantNameAndType* nameAndTypeConstant = getOrCreateNameAndTypeConstant(methodName, methodDescriptor);
@@ -192,23 +201,27 @@ ConstantInterfaceMethodref* Class::getOrCreateInterfaceMethodrefConstant(const s
 }
 
 ConstantInterfaceMethodref* Class::getOrCreateInterfaceMethodrefConstant(ConstantClass* classConstant,
-    const std::string& methodName, const DescriptorMethod& methodDescriptor)
+                                                                         const std::string& methodName,
+                                                                         const DescriptorMethod& methodDescriptor)
 {
     ConstantNameAndType* nameAndTypeConstant = getOrCreateNameAndTypeConstant(methodName, methodDescriptor);
     return getOrCreateInterfaceMethodrefConstant(classConstant, nameAndTypeConstant);
 }
 
 ConstantInterfaceMethodref* Class::getOrCreateInterfaceMethodrefConstant(ConstantClass* classConstant,
-    ConstantUtf8Info* methodNameConstant, const DescriptorMethod& methodDescriptor)
+                                                                         ConstantUtf8Info* methodNameConstant,
+                                                                         const DescriptorMethod& methodDescriptor)
 {
     ConstantNameAndType* nameAndTypeConstant = getOrCreateNameAndTypeConstant(methodNameConstant, methodDescriptor);
     return getOrCreateInterfaceMethodrefConstant(classConstant, nameAndTypeConstant);
 }
 
 ConstantInterfaceMethodref* Class::getOrCreateInterfaceMethodrefConstant(ConstantClass* classConstant,
-    ConstantUtf8Info* methodNameConstant, ConstantUtf8Info* methodDescriptorConstant)
+                                                                         ConstantUtf8Info* methodNameConstant,
+                                                                         ConstantUtf8Info* methodDescriptorConstant)
 {
-    ConstantNameAndType* nameAndTypeConstant = getOrCreateNameAndTypeConstant(methodNameConstant,methodDescriptorConstant);
+    ConstantNameAndType* nameAndTypeConstant = getOrCreateNameAndTypeConstant(
+        methodNameConstant, methodDescriptorConstant);
     return getOrCreateInterfaceMethodrefConstant(classConstant, nameAndTypeConstant);
 }
 
@@ -647,7 +660,7 @@ void Class::addNewConstant(Constant* constant)
 
 void Class::validateFlags(uint16_t flags)
 {
-        using internal::Utils;
+    using internal::Utils;
 
     // Validate public with private/protected
     // Для class допустим только PUBLIC или package-private
@@ -722,6 +735,54 @@ void Class::validateFlags(uint16_t flags)
 
 void Class::fixClassBinary(std::ostream& os, const std::span<const unsigned char>& data)
 {
+#ifdef _WIN32
+    fs::path jarPath = JAVA_INTERNAL_JAR;
+    auto pathToTempFile = std::filesystem::temp_directory_path() / "jvm_class_builder_temp_class.class";
+    try
+    {
+        // write input
+        {
+            std::ofstream inputDataFile(pathToTempFile, std::ios::binary);
+            if (!inputDataFile) throw std::runtime_error("can't open input.class");
+            inputDataFile.write(reinterpret_cast<const char*>(data.data()),
+                                static_cast<std::streamsize>(data.size()));
+            inputDataFile.close();
+        }
+
+        // java.exe
+        const char* jh = std::getenv("JAVA_HOME");
+        if (!jh) throw std::runtime_error("JAVA_HOME not set");
+
+        fs::path javaExe = fs::path(jh) / "bin" / "java.exe";
+
+        std::string cmd =
+            javaExe.string() + " -jar " +
+            jarPath.string() + " " +
+            pathToTempFile.string() + " " +
+            pathToTempFile.string();
+
+
+        int code = std::system(cmd.c_str());
+        if (code != 0)
+            throw std::runtime_error("java -jar failed");
+
+        // read result
+        {
+            std::ifstream in(pathToTempFile, std::ios::binary);
+            if (!in) throw std::runtime_error("can't open finalize.class");
+            os << in.rdbuf();
+        }
+    }
+    catch (...)
+    {
+        // delete temp file
+        std::filesystem::remove(pathToTempFile);
+        throw;
+    }
+    //delete temp file
+    std::filesystem::remove(pathToTempFile);
+#else
+
     JavaVM* jvm = nullptr;
     JNIEnv* env = nullptr;
 
@@ -798,4 +859,5 @@ void Class::fixClassBinary(std::ostream& os, const std::span<const unsigned char
 
     // destroy jvm
     jvm->DestroyJavaVM();
+#endif
 }

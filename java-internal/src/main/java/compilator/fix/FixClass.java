@@ -53,4 +53,18 @@ public class FixClass {
 
         return cw.toByteArray();
     }
+
+    public static void main(String[] args) throws Exception {
+            if (args.length != 2) {
+                System.err.println("Usage: FixClass <input> <output>");
+                System.exit(2);
+            }
+
+            Path in  = Path.of(args[0]);
+            Path out = Path.of(args[1]);
+
+            byte[] inputBytes = Files.readAllBytes(in);
+            byte[] fixedBytes = fix(inputBytes);
+            Files.write(out, fixedBytes);
+        }
 }

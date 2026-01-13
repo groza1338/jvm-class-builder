@@ -33,7 +33,7 @@
     </dependencies>
 
     <build>
-        <!-- Хотим, чтобы итоговый jar назывался fix_code_attribute.jar -->
+        <!-- Итоговый jar: target/fix_code_attribute.jar -->
         <finalName>fix_code_attribute</finalName>
 
         <plugins>
@@ -47,7 +47,6 @@
                 </configuration>
             </plugin>
 
-            <!-- Делаем fat jar основным артефактом без classifier -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-shade-plugin</artifactId>
@@ -59,10 +58,10 @@
                             <goal>shade</goal>
                         </goals>
                         <configuration>
-                            <!-- ВАЖНО: это делает shaded jar "главным" -->
+                            <!-- shaded jar становится главным артефактом -->
                             <shadedArtifactAttached>false</shadedArtifactAttached>
 
-                            <!-- Не добавлять dependency-reduced-pom.xml -->
+                            <!-- не создавать dependency-reduced-pom.xml -->
                             <createDependencyReducedPom>false</createDependencyReducedPom>
 
                             <filters>
@@ -78,7 +77,11 @@
 
                             <transformers>
                                 <transformer implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer"/>
-                                <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer"/>
+
+                                <!-- ВОТ ТУТ ГЛАВНОЕ: прописываем Main-Class -->
+                                <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+                                    <mainClass>compilator.fix.FixClass</mainClass>
+                                </transformer>
                             </transformers>
                         </configuration>
                     </execution>
