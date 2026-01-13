@@ -6,6 +6,11 @@
 
 namespace jvm
 {
+    class Descriptor;
+
+    template <class T>
+    concept DescriptorType = std::same_as<T, Descriptor> || std::derived_from<T, Descriptor>;
+
     /**
      * @brief Base interface for JVM descriptors.
      *
