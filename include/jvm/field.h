@@ -90,6 +90,30 @@ namespace jvm
          */
         Field(ConstantUtf8Info* name, ConstantUtf8Info* descriptor);
 
+        /**
+         * @brief Validates a raw JVM field access_flags bitmask.
+         *
+         * Checks that the provided flags set is valid for a field_info structure
+         * according to the JVM specification (JVMS §4.5).
+         *
+         * The validation includes (but is not limited to):
+         * - ensuring that at most one of @ref ACC_PUBLIC, @ref ACC_PRIVATE, @ref ACC_PROTECTED is present;
+         * - rejecting invalid combinations such as @ref ACC_FINAL together with @ref ACC_VOLATILE;
+         * - applying additional restrictions for enum fields marked with @ref ACC_ENUM.
+         *
+         * @param flags Combined access flags bitmask (OR-ed values of @ref AccessFlag).
+         *
+         * @throws std::logic_error If the flag set is invalid or contains conflicting flags.
+         *
+         * @note This function validates only the semantic correctness of the bitmask.
+         *       It does not check whether referenced constants (name/descriptor) are valid,
+         *       nor does it validate field attributes.
+         *
+         * @see Field::addFlag
+         * @see Field::removeFlag
+         */
+        static void validateFlags(uint16_t flags);
+
         std::set<AccessFlag> accessFlags_{}; ///< Access flags.
         ConstantUtf8Info* name_ = nullptr; ///< String constant with field name.
         ConstantUtf8Info* descriptor_ = nullptr; ///< String constant with field descriptor.

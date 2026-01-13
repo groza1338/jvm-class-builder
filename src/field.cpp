@@ -19,6 +19,13 @@ Field::Field(ConstantUtf8Info* name, ConstantUtf8Info* descriptor) :
 
 void Field::addFlag(AccessFlag flag)
 {
+    uint16_t newFlags = 0;
+    for (auto f : accessFlags_)
+        newFlags |= f;
+
+    newFlags |= flag;
+
+    validateFlags(newFlags);
     accessFlags_.insert(flag);
 }
 
@@ -95,4 +102,44 @@ std::size_t Field::getByteSize() const
         size += attribute->getByteSize();
     }
     return size;
+}
+
+void Field::validateFlags(uint16_t flags)
+{
+    using internal::Utils;
+
+    // Validate public/protected/private
+    int visibilityFlags =
+        Utils::hasFlag(flags, ACC_PUBLIC) +
+        Utils::hasFlag(flags, ACC_PRIVATE) +
+        Utils::hasFlag(flags, ACC_PROTECTED);
+
+    if (visibilityFlags > 1)
+    {
+        throw std::logic_error(
+            "Field cannot have more than one of public/private/protected flags");
+    }
+
+    // Validate final and volatile
+    if (Utils::hasFlag(flags, ACC_FINAL) && Utils::hasFlag(flags, ACC_VOLATILE))
+    {
+        throw std::logic_error(
+            "Field cannot be both final and volatile");
+    }
+
+    // Validate enum with volatile and transient
+    if (Utils::hasFlag(flags, ACC_ENUM))
+    {
+        if (Utils::hasFlag(flags, ACC_VOLATILE))
+        {
+            throw std::logic_error(
+                "Enum field cannot be volatile");
+        }
+
+        if (Utils::hasFlag(flags, ACC_TRANSIENT))
+        {
+            throw std::logic_error(
+                "Enum field cannot be transient");
+        }
+    }
 }
