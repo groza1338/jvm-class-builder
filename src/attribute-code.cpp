@@ -142,9 +142,15 @@ Instruction* AttributeCode::PushDouble(double value)
     return new InstructionLdc(this, doubleConstant);
 }
 
-Instruction* AttributeCode::PushString(ConstantString* str)
+Instruction* AttributeCode::PushString(ConstantString* stringConstant)
 {
-    return new InstructionLdc(this, str);
+    return new InstructionLdc(this, stringConstant);
+}
+
+Instruction* AttributeCode::PushString(const std::string& value)
+{
+    ConstantString* constantString = getOwner()->getOwner()->getOrCreateStringConstant(value);
+    return PushString(constantString);
 }
 
 Instruction* AttributeCode::LoadInt(uint16_t index)

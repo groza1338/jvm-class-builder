@@ -203,10 +203,9 @@ namespace jvm
         [[nodiscard]] Instruction* PushDouble(double value);
 
         /**
-         * @brief Push a {@code java.lang.String} reference onto the operand stack.
+         * @brief Push a {@c java.lang.String} reference onto the operand stack.
          *
          * Pushes a string constant from the constant pool onto the operand stack.
-         * The string value must be represented by a {@ref ConstantString} entry.
          *
          * Before:
          * @code
@@ -216,21 +215,41 @@ namespace jvm
          * After:
          * @code
          * ..., value (reference to String)
-         * @endcode <br>
+         * @endcode
+         *
+         * Uses {@ref INSTRUCTION_ldc} or {@ref INSTRUCTION_ldc_w} depending on the constant pool index size.
+         *
+         * The {@ref ConstantString} must belong to the same class constant pool as this code attribute.
+         *
+         * @param stringConstant String constant to push.
+         * @return A new instruction for this code attribute.
+         * @note The returned instruction is owned by the caller until it is registered using {@ref addInstruction}.
+         */
+        [[nodiscard]] Instruction* PushString(ConstantString* stringConstant);
+
+        /**
+         * @brief Push a {@c java.lang.String} reference onto the operand stack.
+         *
+         * Pushes a string constant from the constant pool onto the operand stack.
+         *
+         * Before:
+         * @code
+         * ...
+         * @endcode
+         *
+         * After:
+         * @code
+         * ..., value (reference to String)
+         * @endcode
          *
          * Uses {@ref INSTRUCTION_ldc} or {@ref INSTRUCTION_ldc_w} depending on
-         * the constant pool index size.
+         * the constant pool index size. Can create new @ref ConstantDouble.
          *
-         * The {@ref ConstantString} must belong to the same class constant pool
-         * as this code attribute.
-         *
-         * @param str String constant to push.
+         * @param value String value to push.
          * @return A new instruction for this code attribute.
-         *
-         * @note The returned instruction is owned by the caller until it is
-         * registered using {@ref addInstruction}.
+         * @note The returned instruction is owned by the caller until it is registered using {@ref addInstruction}.
          */
-        [[nodiscard]] Instruction* PushString(ConstantString* str);
+        [[nodiscard]] Instruction* PushString(const std::string& value);
 
         /**
          * @brief Loads an @b integer value from the local variable array at the given index
