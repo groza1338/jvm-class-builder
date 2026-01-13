@@ -1245,6 +1245,11 @@ AttributeCode::AttributeCode(Method* methodOwner) :
 {
 }
 
+std::size_t AttributeCode::getByteSize() const
+{
+    return Attribute::getByteSize();
+}
+
 bool AttributeCode::isFinalized() const
 {
     return isFinalized_;
