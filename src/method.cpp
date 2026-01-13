@@ -10,6 +10,13 @@ using namespace jvm;
 
 void Method::addFlag(AccessFlag flag)
 {
+    uint16_t newFlags = 0;
+    for (auto f : accessFlags_)
+        newFlags |= f;
+
+    newFlags |= flag;
+
+    validateFlags(newFlags);
     accessFlags_.insert(flag);
 }
 
@@ -80,7 +87,7 @@ void Method::writeTo(std::ostream& os) const
     uint16_t attributeCount = attributes_.size();
     internal::Utils::writeBigEndian(os, attributeCount);
 
-    if (codeAttribute_ != nullptr) {codeAttribute_->finalize();}
+    if (codeAttribute_ != nullptr) { codeAttribute_->finalize(); }
     // attribute_info attributes[attributes_count];
     for (auto* attribute : attributes_)
     {
@@ -104,4 +111,37 @@ Method::Method(ConstantUtf8Info* name, ConstantUtf8Info* descriptor) :
     Class* nameOwner = name->getOwner();
     Class* descriptorOwner = descriptor->getOwner();
     assert(nameOwner == descriptorOwner);
+}
+
+void Method::validateFlags(uint16_t flags)
+{
+    using internal::Utils;
+
+    // Validate public/protected/private
+    int visibilityFlags = Utils::hasFlag(flags, ACC_PUBLIC) + Utils::hasFlag(flags, ACC_PRIVATE) + Utils::hasFlag(
+        flags, ACC_PROTECTED);
+    if (visibilityFlags > 1)
+    {
+        throw std::logic_error(
+            "Method cannot have more than one of public/private/protected flags");
+    }
+
+    // Validate abstract with final/native/synchronized
+    if (Utils::hasFlag(flags, ACC_ABSTRACT))
+    {
+        if (Utils::hasFlag(flags, ACC_FINAL))
+            throw std::logic_error("Abstract method cannot be final");
+
+        if (Utils::hasFlag(flags, ACC_NATIVE))
+            throw std::logic_error("Abstract method cannot be native");
+
+        if (Utils::hasFlag(flags, ACC_SYNCHRONIZED))
+            throw std::logic_error("Abstract method cannot be synchronized");
+    }
+
+    // Validate native with synchronized
+    if (Utils::hasFlag(flags, ACC_NATIVE) && Utils::hasFlag(flags, ACC_SYNCHRONIZED))
+    {
+        throw std::logic_error("Native method cannot be synchronized");
+    }
 }

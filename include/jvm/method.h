@@ -102,6 +102,37 @@ namespace jvm
          */
         Method(ConstantUtf8Info* name, ConstantUtf8Info* descriptor);
 
+        /**
+         * @brief Validate method access flags according to the JVM specification.
+         *
+         * Checks that the given set of access flags represents a valid combination
+         * for a JVM method. This function enforces semantic constraints defined by
+         * the Java Virtual Machine Specification, including but not limited to:
+         *
+         * - At most one of {@c ACC_PUBLIC}, {@c ACC_PRIVATE}, {@c ACC_PROTECTED}
+         *   may be present.
+         * - {@c ACC_ABSTRACT} must not be combined with:
+         *   {@c ACC_FINAL}, {@c ACC_NATIVE}, {@c ACC_SYNCHRONIZED},
+         *   or a {@c Code} attribute.
+         * - {@c ACC_NATIVE} and {@c ACC_ABSTRACT} must not both be present.
+         * - {@c ACC_BRIDGE} implies {@c ACC_SYNTHETIC}.
+         * - {@c ACC_STRICT} is only meaningful for non-abstract, non-native methods.
+         *
+         * If the flag combination is invalid, this function throws
+         * {@c std::logic_error}.
+         *
+         * @param flags Bitmask of method access flags to validate.
+         *
+         * @throws std::logic_error If the flag combination violates JVM constraints.
+         *
+         * @note This function is called internally when modifying method access flags
+         *       and before serializing the method into a class file.
+         *
+         * @see Method::addFlag
+         * @see Method::removeFlag
+         */
+        static void validateFlags(uint16_t flags);
+
         std::set<AccessFlag> accessFlags_{}; ///< Access flags.
         ConstantUtf8Info* name_ = nullptr; ///< String constant with method name.
         ConstantUtf8Info* descriptor_ = nullptr; ///< String constant with method descriptor.
