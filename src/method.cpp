@@ -98,7 +98,8 @@ std::size_t Method::getByteSize() const
     return size;
 }
 
-Method::Method(ConstantUtf8Info* name, ConstantUtf8Info* descriptor) : ClassFileElement(name->getOwner())
+Method::Method(ConstantUtf8Info* name, ConstantUtf8Info* descriptor) :
+    ClassFileElement(name->getOwner()), name_(name), descriptor_(descriptor)
 {
     Class* nameOwner = name->getOwner();
     Class* descriptorOwner = descriptor->getOwner();
