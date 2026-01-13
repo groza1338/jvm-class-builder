@@ -78,8 +78,8 @@ endif ()
 
 # generate paths for internal java project
 configure_file(
-        cmake/java-internal-paths.h.in.h
-        generated/java-internal-paths.h
+        ${CMAKE_CURRENT_SOURCE_DIR}/cmake/java-internal-paths.h.in.h
+        ${CMAKE_CURRENT_SOURCE_DIR}/generated/java-internal-paths.h
 )
 
 add_library(jvm-class-builder
@@ -125,7 +125,7 @@ target_include_directories(jvm-class-builder
         $<INSTALL_INTERFACE:include>
         PRIVATE
         ${CMAKE_CURRENT_SOURCE_DIR}/src/internal
-        ${CMAKE_BINARY_DIR}/generated
+        ${CMAKE_CURRENT_SOURCE_DIR}/generated
         ${JAVA_INCLUDE_PATH}
         ${JAVA_INCLUDE_PATH2}
 )
