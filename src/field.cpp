@@ -81,7 +81,6 @@ void Field::writeTo(std::ostream& os) const
     // u2             descriptor_index;
     uint16_t descriptorIndex = descriptor_->getIndex();
     internal::Utils::writeBigEndian(os, descriptorIndex);
-    os.write(reinterpret_cast<const char*>(&descriptorIndex), sizeof(descriptorIndex));
 
     // u2             attributes_count;
     uint16_t attributeCount = attributes_.size();
