@@ -446,6 +446,45 @@ ConstantUtf8Info* Class::getOrCreateUtf8Constant(const std::string& value)
     return utf8Constant;
 }
 
+Field* Class::getOrCreateField(const std::string& name, const DescriptorField& descriptor)
+{
+    auto* nameConstant = getOrCreateUtf8Constant(name);
+    auto* descriptorConstant = getOrCreateUtf8Constant(descriptor.toString());
+    return getOrCreateField(nameConstant, descriptorConstant);
+}
+
+Field* Class::getOrCreateField(const std::string& name, ConstantUtf8Info* descriptorConstant)
+{
+    auto* nameConstant = getOrCreateUtf8Constant(name);
+    return getOrCreateField(nameConstant, descriptorConstant);
+}
+
+Field* Class::getOrCreateField(ConstantUtf8Info* nameConstant, const DescriptorField& descriptor)
+{
+    auto* descriptorConstant = getOrCreateUtf8Constant(descriptor.toString());
+    return getOrCreateField(nameConstant, descriptorConstant);
+}
+
+Field* Class::getOrCreateField(ConstantUtf8Info* nameConstant, ConstantUtf8Info* descriptorConstant)
+{
+    assert(this == nameConstant->getOwner());
+    assert(this == descriptorConstant->getOwner());
+
+    // search field
+    for (auto* field : fields_)
+    {
+        if (field->getName() == nameConstant && field->getDescriptor() == descriptorConstant)
+        {
+            return field;
+        }
+    }
+
+    // create new
+    auto* field = new Field(nameConstant, descriptorConstant);
+    fields_.insert(field);
+    return field;
+}
+
 Method* Class::getOrCreateMethod(const std::string& name, const DescriptorMethod& descriptor)
 {
     auto* nameConstant = getOrCreateUtf8Constant(name);

@@ -395,6 +395,57 @@ namespace jvm
          */
         ConstantUtf8Info* getOrCreateUtf8Constant(const std::string& value);
         //endregion
+
+        //region GET OR CREATE FIELD
+
+        /**
+        * @brief Returns an existing @ref Field "field" with the specified name and descriptor,
+         *        or creates and returns a new one.
+         *
+         * The field is identified by its name and descriptor within this class.
+         *
+         * @param name Field name (e.g. "a", "object", "&lt;init&gt;", "&lt;clinit&gt;").
+         * @param descriptor Descriptor object representing a field descriptor.
+         * @return Field instance owned by this class.
+         */
+        Field* getOrCreateField(const std::string& name, const DescriptorField& descriptor);
+
+        /**
+        * @brief Returns an existing @ref Field "field" with the specified name and descriptor,
+         *        or creates and returns a new one.
+         *
+         * The field is identified by its name and descriptor within this class.
+         *
+         * @param name Field name (e.g. "a", "object", "&lt;init&gt;", "&lt;clinit&gt;").
+         * @param descriptorConstant UTF-8 constant containing the field descriptor.
+         * @return Field instance owned by this class.
+         */
+        Field* getOrCreateField(const std::string& name, ConstantUtf8Info* descriptorConstant);
+
+        /**
+         * @brief Returns an existing @ref Field "field" with the specified name and descriptor,
+          *        or creates and returns a new one.
+          *
+          * The field is identified by its name and descriptor within this class.
+          *
+          * @param nameConstant UTF-8 constant containing the method name.
+          * @param descriptor Descriptor object representing a field descriptor.
+          * @return Field instance owned by this class.
+          */
+        Field* getOrCreateField(ConstantUtf8Info* nameConstant, const DescriptorField& descriptor);
+
+        /**
+         * @brief Returns an existing @ref Field "field" with the specified name and descriptor,
+          *        or creates and returns a new one.
+          *
+          * The field is identified by its name and descriptor within this class.
+          *
+          * @param nameConstant UTF-8 constant containing the method name.
+          * @param descriptorConstant UTF-8 constant containing the field descriptor.
+          * @return Field instance owned by this class.
+          */
+        Field* getOrCreateField(ConstantUtf8Info* nameConstant, ConstantUtf8Info* descriptorConstant);
+
         //region GET OR CREATE METHOD
 
         /**
