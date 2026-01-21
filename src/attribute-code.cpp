@@ -1109,9 +1109,20 @@ Instruction* AttributeCode::MonitorExit()
 
 Instruction* AttributeCode::MultiNewArray(ConstantClass* classConstant, uint8_t dimensions)
 {
-    // ToDo: Implement support for the "multianewarray" instruction
-    throw std::logic_error("\"multianewarray\" instruction not implemented yet.");
-    return new Instruction(this, Instruction::INSTRUCTION_multianewarray);
+    if (dimensions == 0)
+    {
+        throw std::invalid_argument("Dimensions count must be greater than zero.");
+    }
+
+    auto* instruction = new InstructionWithConstant(
+        this,
+        Instruction::INSTRUCTION_multianewarray,
+        classConstant,
+        InstructionWithConstant::TwoByte
+    );
+
+    instruction->setTrailingByte(dimensions);
+    return instruction;
 }
 
 InstructionJump* AttributeCode::IfNull(Label* label)

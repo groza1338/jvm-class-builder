@@ -24,6 +24,12 @@ void InstructionWithConstant::setAvailableReferenceSize(AvailableReferenceSize s
     size_ = size;
 }
 
+void InstructionWithConstant::setTrailingByte(uint8_t trailingByte)
+{
+    trailingByte_ = trailingByte;
+    hasTrailingByte_ = true;
+}
+
 void InstructionWithConstant::update()
 {
 }
@@ -45,9 +51,14 @@ void InstructionWithConstant::writeTo(std::ostream& os) const
     {
         internal::Utils::writeBigEndian(os, index);
     }
+
+    if (hasTrailingByte_)
+    {
+        internal::Utils::writeBigEndian(os, trailingByte_);
+    }
 }
 
 size_t InstructionWithConstant::getByteSize() const
 {
-    return Instruction::getByteSize() + size_;
+    return Instruction::getByteSize() + size_ + (hasTrailingByte_ ? sizeof(trailingByte_) : 0);
 }

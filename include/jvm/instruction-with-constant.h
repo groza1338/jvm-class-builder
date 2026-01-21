@@ -54,6 +54,13 @@ namespace jvm
         void setAvailableReferenceSize(AvailableReferenceSize size);
 
         /**
+         * @brief Append a trailing byte operand after the constant pool index.
+         *
+         * @param trailingByte Extra byte operand to serialize.
+         */
+        void setTrailingByte(uint8_t trailingByte);
+
+        /**
          * Heirs can overload this method for update available reference size and other parameters.
          * Calls by @ref AttributeCode::finalize.
          */
@@ -69,6 +76,8 @@ namespace jvm
     private:
         Constant* constant_; ///< Referenced constant pool entry.
         AvailableReferenceSize size_; ///< Operand size used to encode the constant pool index.
+        bool hasTrailingByte_ = false;
+        uint8_t trailingByte_ = 0;
     };
 } // jvm
 
